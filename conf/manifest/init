@@ -1,0 +1,11 @@
+#!/bin/bash
+# Every machine becomes a marker, so sysadmins know that automatic
+# configurations are happening
+__file /etc/cdist-configured
+
+case "$__target_host" in
+   blue18)
+   . $__manifest/samplereturn
+   ;;
+
+esac

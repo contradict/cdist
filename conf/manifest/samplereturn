@@ -1,0 +1,80 @@
+#!/bin/bash
+
+__workstation
+
+__group firewire
+__group can
+require="__group/firewire __group/can" \
+    __user --home /home/robot \
+           --groups "adm,dialout,cdrom,plugdev,lpadmin,admin,sambashare,firewire,can" \
+           --shell /bin/bash \
+           robot
+require="__user/robot" \
+    __directory /home/robot \
+    --owner robot \
+    --group robot \
+    --mode 755
+
+require="__directory/home/robot" \
+    __ssh_authorized_key \
+    --srcfile $__manifest/files/robot_rsa.pub \
+    --dstuser robot \
+    robot
+require="__ssh_authorized_key/robot" \
+    __file /home/robot/.ssh/robot_rsa \
+    --group robot \
+    --mode 600 \
+    --owner robot \
+    --source $__manifest/files/robot_rsa
+require="__ssh_authorized_key/robot" \
+    __file /home/robot/.ssh/robot_rsa.pub \
+    --group robot \
+    --mode 600 \
+    --owner robot \
+    --source $__manifest/files/robot_rsa.pub
+
+require="__user/robot" \
+    __addifnosuchline autologin_user \
+    --file /etc/lightdm/lightdm.conf \
+    --line 'autologin-user=robot'
+require="__user/robot" \
+    __addifnosuchline autologin_timeout \
+    --file /etc/lightdm/lightdm.conf \
+    --line 'autologin-user-timeout=0'
+
+require="__user/robot" \
+    __directory /home/robot/.config \
+    --owner robot \
+    --group robot
+require="__directory/home/robot/.config" \
+    __directory /home/robot/.config/autostart \
+    --owner robot \
+    --group robot
+require="__directory/home/robot/.config/autostart" \
+    __file /home/robot/.config/autostart/roscore.desktop \
+    --source $__manifest/files/roscore.desktop \
+    --owner robot \
+    --group robot \
+    --mode 777
+
+
+__file /etc/udev/rules.d/50-firewire.rules
+require="__file/etc/udev/rules.d/50-firewire.rules" \
+    __addifnosuchline \
+    --line 'KERNEL==\"fw*\", GROUP="firewire",MODE=\"0660\"' \
+    /etc/udev/rules.d/50-firewire.rules
+
+__addifnosuchline modules_acpiphp \
+    --line "acpiphp" \
+    --file "/etc/modules"
+
+__kvaser_canlib --tarname "linuxcan" --version "4.78-2" --devices "leaf"
+
+__package_apt libtbb-dev --state present
+__package_apt libsuitesparse-dev --state present
+
+__ros
+
+require="__ros" __package_apt ros-electric-joystick-drivers --state present
+require="__ros" __package_apt ros-electric-camera-drivers --state present 
+
