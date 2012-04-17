@@ -1,0 +1,8 @@
+#!/bin/sh
+# run 'apt-get upgrade' if any packages can be upgraded
+upgrade_count="$(cat "$__object/explorer/upgrade_count")"
+if [ "$upgrade_count" != "0" ]; then
+    cat <<- DONE
+        apt-get -qy upgrade
+DONE
+fi
