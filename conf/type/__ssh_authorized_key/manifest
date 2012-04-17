@@ -34,9 +34,14 @@ fi
 # if a source user is defined, use it's public key
 if [ "$srcuser" ]; then
    srcrsa="/home/${srcuser}/.ssh/id_rsa.pub"
-# if no source user is defined we use root's public key
 else
-   srcrsa="/root/.ssh/id_rsa.pub"
+   # if a source file is defined, use its contents
+   if [ -f "$__object/parameter/srcfile" ]; then
+       srcrsa=`cat "$__object/parameter/srcfile"`
+   else
+      # if no source user and no source file is defined we use root's public key
+      srcrsa="/root/.ssh/id_rsa.pub"
+   fi
 fi
 # if a destination user is defined, insert in it's authorized_keys
 if [ "$dstuser" ]; then

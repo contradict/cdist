@@ -21,6 +21,7 @@ None.
 OPTIONAL PARAMETERS
 -------------------
 srcuser:: the user to take the rsa public key from
+srcfile:: if no srcuser is defined, use this file for the key
 dstuser:: the user to give the rsa public key to
 
 
