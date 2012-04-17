@@ -1,0 +1,45 @@
+#!/bin/bash
+
+__apt_ppa "ppa:mozillateam/firefox-next" --state enabled
+__apt_ppa "ppa:mozillateam/thunderbird-next" --state enabled
+
+require="__apt_ppa/ppa:mozillateam/firefox-next __apt_ppa/ppa:mozillateam/thunderbird-next"\
+    __apt_upgrade
+
+packages="
+vim
+ctags
+vim-doc
+vim-scripts
+git-all
+subversion
+cvs
+terminator
+build-essential
+manpages-dev
+manpages-posix-dev
+manpages-posix
+texlive
+screen
+byobu
+tmux
+imagemagick
+imagemagick-doc
+smbfs
+python-dev
+gfortran
+python-numpy
+python-scipy
+python-matplotlib
+ipython
+python-pip
+cython
+sshfs
+"
+
+for pkg in $packages
+do
+    __package $pkg --state present
+done
+
+

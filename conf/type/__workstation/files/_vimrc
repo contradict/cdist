@@ -1,0 +1,46 @@
+set nocompatible
+" set backspace to be able to delete previous characters
+set bs=2
+" Enable line numbering, taking up 6 spaces
+set number
+
+"Turn off word wrapping
+set wrap!
+set textwidth=80
+
+"Turn on smart indent
+set autoindent
+set tabstop=4 "set tab character to 4 characters
+set softtabstop=4
+set expandtab "turn tabs into whitespace
+set shiftwidth=4 "indent width for autoindent
+filetype indent on "indent depends on filetype
+set smarttab
+
+"Shortcut to auto indent entire file
+nmap <F11> 1G=G
+imap <F11> <ESC>1G=Ga
+
+"Turn on incremental search with ignore case (except explicit caps)
+set incsearch
+set ignorecase
+set smartcase
+
+"Informative status line
+set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
+
+"Set color scheme
+set t_Co=256
+colorscheme inkpot
+syntax enable
+
+"Enable indent folding
+set foldenable
+set fdm=indent
+
+"Set space to toggle a fold
+nnoremap <space> za
+
+"Hide buffer when not in window (to prevent relogin with FTP edit)
+set bufhidden=hide
+
