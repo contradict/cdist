@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ -f "$__object/parameter/repository" ]; then
+   repo=$(cat "$__object/parameter/repository")
+else
+   repo="$__object_id"
+fi
+
+python - <<zzCheckRepoScriptzz
+from softwareproperties.SoftwareProperties import SourcesList, SourceEntry
+repo_uri="${repo}"
+sources = SourcesList()
+if repo_uri in [x.uri for x in sources.list if not (x.invalid or x.disabled)]:
+    print 'present'
+else:
+    print 'absent'
+zzCheckRepoScriptzz

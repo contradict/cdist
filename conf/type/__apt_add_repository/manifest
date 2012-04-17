@@ -1,0 +1,6 @@
+#!/bin/bash
+
+__package python-software-properties --state present
+
+require="$__object_name" __apt_update_index
+
