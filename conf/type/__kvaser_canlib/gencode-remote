@@ -1,0 +1,35 @@
+#!/bin/bash
+
+version="$(cat "$__object/parameter/version")"
+tarfile="$(cat "$__object/parameter/tarname")"${version}.tar.gz
+
+# echo "tarfile: ${tarfile}" >&2
+
+lib_installed="$(cat "$__object/explorer/lib_installed")"
+# echo "lib_installed: ${lib_installed}" >&2
+
+
+if [ "${lib_installed}" = "absent" ]; then
+    # echo "unpacking" >&2
+    echo "cd /usr/local/src || exit 1"
+    echo "rm -fr linuxcan_v4"
+    echo "tar -xzf ${tarfile} || exit 1"
+    echo "cd linuxcan_v4 || exit 1"
+    echo "make canlib_install || exit 1"
+    echo "touch cdist_canlib_${version} || exit 1"
+fi
+
+if [ -f "$__object/parameter/devices" ]; then
+    devices="$(cat "$__object/parameter/devices")"
+    installed_devs="$(cat "$__object/explorer/devices_installed")"
+    # echo "devices: ${devices}" >&2
+    # echo "installed_devices: ${installed_devs}" >&2
+    for dev in $devices; do
+        if ! $( echo ${installed_devs} | grep -q cdist_canlib_${dev}_${version} ); then
+            # echo "installing cdist_canlib_${dev}_${version}" >&2
+            echo "cd /usr/local/src/linuxcan_v4 || exit 1"
+            echo "make ${dev}_install || exit 1"
+            echo "touch cdist_canlib_${dev}_${version} || exit 1"
+        fi
+    done
+fi

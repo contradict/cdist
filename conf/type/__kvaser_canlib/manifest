@@ -1,0 +1,9 @@
+#!/bin/bash
+
+tarfile="$(cat "$__object/parameter/tarname")""$(cat "$__object/parameter/version")".tar.gz
+
+__file /usr/local/src/${tarfile} \
+    --source ${__type}/files/${tarfile} \
+    --owner robot \
+    --group robot
+
