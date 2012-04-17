@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ -f "$__object/parameter/distribution" ]; then
+    distribution="$(cat "$__object/parameter/distribution")"
+else
+    distribution="electric"
+fi
+
+__apt_add_repository --repository http://packages.ros.org/ros/ubuntu \
+                     --state present \
+                     --keyurl http://packages.ros.org/ros.key \
+                     rosrepo
+
+require="__apt_add_repository/rosrepo "\
+    __package_apt ros-${distribution}-desktop-full --state present
+
+__addifnosuchline rossetup \
+    --line ". /opt/ros/${distribution}/setup.bash" \
+    --file "/etc/bash.bashrc"
