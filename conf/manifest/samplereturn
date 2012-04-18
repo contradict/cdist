@@ -77,4 +77,5 @@ __ros
 
 require="__ros" __package_apt ros-electric-joystick-drivers --state present
 require="__ros" __package_apt ros-electric-camera-drivers --state present 
+require="__ros" __package_apt ros-electric-dynamixel-motor --state present 
 
