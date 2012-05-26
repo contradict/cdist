@@ -24,6 +24,7 @@ __package python-software-properties --state present
 
 require="__package/python-software-properties" \
    __file /usr/local/bin/remove-apt-repository \
+   --state present \
    --source "$__type/files/remove-apt-repository" \
    --mode 0755
 
