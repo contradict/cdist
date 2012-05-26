@@ -35,6 +35,9 @@ ipython
 python-pip
 cython
 sshfs
+htop
+apt-file
+acpi
 "
 
 for pkg in $packages
