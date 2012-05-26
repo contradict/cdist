@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ "$(cat $__object/explorer/exists)" = "none" ]
+then
+	echo "sh -c /tmp/build_opencv.sh"
+	echo "rm /tmp/build_opencv.sh"
+fi
+

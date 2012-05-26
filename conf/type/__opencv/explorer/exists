@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ -e '/usr/local/include/opencv2/opencv.hpp' ]; then
+	echo '#include <opencv2/core/version.hpp>\n#include <stdio.h>\nint main(){printf(CV_VERSION"%c",0x0a);return 0;}' | gcc -oversion -I /usr/local/include -xc -
+	./version
+	rm version
+else
+	echo "none"
+fi

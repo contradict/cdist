@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Also needs nvidia-cuda-toolkit >=4.1, there is no
+# good automated way to install this yet.
+
+packages="
+cmake
+libjpeg62-dev
+libpng12-dev
+libtiff4-dev
+libjasper-dev
+libopenexr-dev
+libgtk2.0-dev
+libdc1394-22-dev
+libavbin-dev
+libswscale-dev
+libavformat-dev
+libtbb-dev
+libxine-dev
+libgstreamer-plugins-base0.10-dev
+libv4l-dev
+python-sphinx
+"
+
+for pkg in $packages
+do
+    __package $pkg --state present
+done
+
+echo "copying build script..." >&2
+__file /tmp/build_opencv.sh --state present \
+    --source "$__type/files/build_opencv.sh"
+# assuming cuda is installed with the nvidia tools, these
+# need to be added manually
+__file /etc/profile.d/cudapath.sh --state present \
+	--source "$__type/files/cudapath.sh"
+__file /etc/ld.so.conf.d/cuda.conf --state present \
+	--source "$__type/files/cuda.conf"
+
