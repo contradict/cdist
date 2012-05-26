@@ -2,13 +2,10 @@
 
 __workstation
 
-__group firewire
-__group can
-require="__group/firewire __group/can" \
-    __user --home /home/robot \
-           --groups "adm,dialout,cdrom,plugdev,lpadmin,admin,sambashare,firewire,can" \
-           --shell /bin/bash \
-           robot
+__user --home /home/robot \
+       --groups "adm,dialout,cdrom,plugdev,lpadmin,admin,sambashare,video" \
+       --shell /bin/bash \
+       robot
 require="__user/robot" \
     __directory /home/robot \
     --owner robot \
@@ -57,12 +54,26 @@ require="__directory/home/robot/.config/autostart" \
     --group robot \
     --mode 777
 
-
-__file /etc/udev/rules.d/50-firewire.rules
-require="__file/etc/udev/rules.d/50-firewire.rules" \
-    __addifnosuchline \
-    --line 'KERNEL==\"fw*\", GROUP="firewire",MODE=\"0660\"' \
-    /etc/udev/rules.d/50-firewire.rules
+require="__user/robot" \
+    __gsettings aclidaction \
+    --user robot \
+    --schema org.gnome.settings-daemon.plugins.power \
+    --key lid-close-ac-action \
+    --value nothing
+require="__user/robot" \
+    __gsettings battlidaction \
+    --user robot \
+    --schema org.gnome.settings-daemon.plugins.power \
+    --key lid-close-battery-action \
+    --value nothing
+require="__user/robot" \
+    __gsettings noautomount \
+    --user robot \
+    --schema org.gnome.desktop.media-handling \
+    --key automount \
+    --value false
+require="__user/robot" \
+    __dotfiles robot
 
 __addifnosuchline modules_acpiphp \
     --line "acpiphp" \
@@ -78,4 +89,8 @@ __ros
 require="__ros" __package_apt ros-electric-joystick-drivers --state present
 require="__ros" __package_apt ros-electric-camera-drivers --state present 
 require="__ros" __package_apt ros-electric-dynamixel-motor --state present 
+require="__ros" __package_apt ros-electric-bosch-drivers --state present 
 
+__opencv
+
+__samplereturn_network --ETH0_IP=$ETH0_IP --WLAN_IP=$WLAN_IP
