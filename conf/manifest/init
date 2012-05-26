@@ -4,8 +4,15 @@
 __file /etc/cdist-configured
 
 case "$__target_host" in
-   blue18)
-   . $__manifest/samplereturn
-   ;;
+    blue18*)
+        export ETH0_IP="10.10.180.20"
+        export WLAN_IP="192.168.200.20"
+        . $__manifest/samplereturn
+        ;;
+    moline*)
+        export ETH0_IP="10.10.180.21"
+        export WLAN_IP="192.168.200.21"
+        . $__manifest/samplereturn
+        ;;
 
 esac
