@@ -1,0 +1,31 @@
+#!/bin/sh
+
+export ETH0_NM="255.255.0.0"
+export ETH0_GW="10.10.1.1"
+export WLAN_CHANNEL="4"
+export WLAN_SSID="samplerobot"
+export WLAN_KEY="752ac5142d"
+export WLAN_NM="255.255.255.0"
+ETH0_IP=$(cat $__object/parameter/ETH0_IP)
+WLAN_IP=$(cat $__object/parameter/WLAN_IP)
+export ETH0_IP WLAN_IP
+if [ "$(cat $__object/explorer/eth0_address)" = "${ETH0_IP}" -a \
+	 "$(cat $__object/explorer/eth0_gateway)" = "${ETH0_GW}" -a \
+	 "$(cat $__object/explorer/eth0_netmask)" = "${ETH0_NM}" -a \
+	 "$(cat $__object/explorer/wlan0_address)" = "${WLAN_IP}" -a \
+	 "$(cat $__object/explorer/wlan0_netmask)" = "${WLAN_NM}" -a \
+	 "$(cat $__object/explorer/wlan0_wireless-channel)" = "${WLAN_CHANNEL}" -a \
+	 "$(cat $__object/explorer/wlan0_wireless-essid)" = "${WLAN_SSID}" -a \
+	 "$(cat $__object/explorer/wlan0_wireless-key)" = "${WLAN_KEY}" ] ; then
+# all set, don't change a thing
+true
+else
+	# create new file
+	mkdir -p "$__object/files"
+	"$__type/templates/interfaces.sh" > "$__object/files/interfaces"
+	__file /etc/network/interfaces --source "$__object/files/interfaces"
+fi
+
+__addifnosuchline nameserver \
+    --file /etc/resolv.conf \
+    --line 'nameserver 10.10.10.10'
