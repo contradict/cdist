@@ -1,0 +1,27 @@
+#!/bin/bash
+
+schema="$( cat "$__object/parameter/schema" )"
+key="$( cat "$__object/parameter/key" )"
+value="$( cat "$__object/parameter/value" )"
+
+if [ -f "$__object/parameter/user" ]; then
+    user="$( cat "$__object/parameter/user" )"
+    cat <<_EOF_
+sessionfiles=\`find "/home/${user}/.dbus/session-bus/" -type f \`
+for sessionfile in \${sessionfiles}; do
+    export \`grep "DBUS_SESSION_BUS_ADDRESS" "\${sessionfile}" | sed '/^#/d'\`
+    export \`grep "DBUS_SESSION_BUS_PID" "\${sessionfile}" | sed '/^#/d'\`
+    if kill -0 \${DBUS_SESSION_BUS_PID} >/dev/null 2>&1; then
+        su ${user} /bin/bash -c "gsettings set ${schema} ${key} ${value}"
+
+        exit 0
+    fi
+done
+echo "failed to find running dbus" >&2
+exit 1
+_EOF_
+
+else
+    echo "gsettings set ${schema} ${key} ${value}"
+fi
+
