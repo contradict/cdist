@@ -1,0 +1,32 @@
+#!/bin/sh
+
+uid=`cat "$__object/explorer/uid"`
+gid=`cat "$__object/explorer/gid"`
+
+__file /home/${__object_id}/.bashrc --state present \
+   --source $__type/files/_bashrc \
+   --owner ${uid} \
+   --group ${gid}
+
+__file /home/${__object_id}/.profile --state present \
+   --source $__type/files/_profile \
+   --owner ${uid} \
+   --group ${gid}
+
+__file /home/${__object_id}/.bash_logout --state present \
+   --source $__type/files/_bash_logout \
+   --owner ${uid} \
+   --group ${gid}
+
+__file /home/${__object_id}/.vimrc --state present \
+   --source $__type/files/_vimrc \
+   --owner ${uid} \
+   --group ${gid}
+
+mkdir -p $__object/files
+tar -cf $__object/files/__vim.tar --owner ${uid} --group ${gid} -C $__type/files/ _vim
+__file /tmp/__vim.tar --state present \
+    --source $__object/files/__vim.tar 
+__directory /home/${__object_id}/.vim --state present \
+    --owner ${uid} \
+    --group ${gid}

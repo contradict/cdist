@@ -1,0 +1,5 @@
+#!/bin/sh
+
+user=$__object_id
+
+id -u ${user}

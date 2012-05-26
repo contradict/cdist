@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ -f "$__object/parameter/group" ]; then
+    group=`cat "$__object/parameter/group"`
+else
+    group=$__object_id
+fi
+
+leading_components=`echo -n "$__object/files/_vim" | sed 's+[^/]++g' | wc -c`
+
+cat <<EOF
+tar --strip-components 1 -Pxpf /tmp/__vim.tar -C/home/${__object_id}/.vim
+rm /tmp/__vim.tar
+EOF

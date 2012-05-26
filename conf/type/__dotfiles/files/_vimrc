@@ -9,17 +9,12 @@ set wrap!
 set textwidth=80
 
 "Turn on smart indent
+set expandtab
 set autoindent
 set tabstop=4 "set tab character to 4 characters
 set softtabstop=4
-set expandtab "turn tabs into whitespace
 set shiftwidth=4 "indent width for autoindent
-filetype indent on "indent depends on filetype
-set smarttab
-
-"Shortcut to auto indent entire file
-nmap <F11> 1G=G
-imap <F11> <ESC>1G=Ga
+filetype plugin indent on "indent depends on filetype
 
 "Turn on incremental search with ignore case (except explicit caps)
 set incsearch
@@ -34,13 +29,7 @@ set t_Co=256
 colorscheme inkpot
 syntax enable
 
-"Enable indent folding
 set foldenable
-set fdm=indent
-
 "Set space to toggle a fold
 nnoremap <space> za
-
-"Hide buffer when not in window (to prevent relogin with FTP edit)
-set bufhidden=hide
 

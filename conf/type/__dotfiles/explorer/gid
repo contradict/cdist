@@ -1,0 +1,10 @@
+#!/bin/sh
+
+user=$__object_id
+if [ -f "$__object/parameter/group" ]; then
+    group=`cat "$__object/parameter/group"`
+else
+    group=$user
+fi
+
+id -g ${user}
