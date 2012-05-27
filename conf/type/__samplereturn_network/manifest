@@ -29,3 +29,5 @@ fi
 __addifnosuchline nameserver \
     --file /etc/resolv.conf \
     --line 'nameserver 10.10.10.10'
+
+__file /etc/ethers --source "$__type/files/ethers"
