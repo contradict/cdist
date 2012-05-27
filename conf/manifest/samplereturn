@@ -2,6 +2,8 @@
 
 __workstation
 
+__package wakeonlan --state present
+
 __user --home /home/robot \
        --groups "adm,dialout,cdrom,plugdev,lpadmin,admin,sambashare,video" \
        --shell /bin/bash \
