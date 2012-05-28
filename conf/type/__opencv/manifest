@@ -27,13 +27,16 @@ do
     __package $pkg --state present
 done
 
-echo "copying build script..." >&2
-__file /tmp/build_opencv.sh --state present \
-    --source "$__type/files/build_opencv.sh"
-# assuming cuda is installed with the nvidia tools, these
-# need to be added manually
-__file /etc/profile.d/cudapath.sh --state present \
-	--source "$__type/files/cudapath.sh"
-__file /etc/ld.so.conf.d/cuda.conf --state present \
-	--source "$__type/files/cuda.conf"
-
+if [ "$(cat $__object/explorer/exists)" = "none" ]; then
+    echo "copying build script..." >&2
+    __file /tmp/build_opencv.sh --state present \
+        --source "$__type/files/build_opencv.sh"
+    # assuming cuda is installed with the nvidia tools, these
+    # need to be added manually
+    __file /etc/profile.d/cudapath.sh --state present \
+        --source "$__type/files/cudapath.sh"
+    __file /etc/ld.so.conf.d/cuda.conf --state present \
+        --source "$__type/files/cuda.conf"
+    __file /tmp/opencv.pc --state present \
+        --source "$__type/files/opencv.pc"
+fi

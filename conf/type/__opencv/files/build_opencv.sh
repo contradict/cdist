@@ -23,5 +23,6 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 make -j8
 make install
 ldconfig
+mv /tmp/opencv.pc /usr/local/lib/pkgconfig/opencv.pc
 popd
 # rm -rf opencv-svn
