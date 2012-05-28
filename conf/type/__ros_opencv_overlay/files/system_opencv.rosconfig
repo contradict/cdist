@@ -1,0 +1,10 @@
+- svn:
+    uri: https://code.ros.org/svn/ros-pkg/stacks/vision_opencv/trunk
+    local-name: vision_opencv
+- svn:
+    uri: https://code.ros.org/svn/ros-pkg/stacks/image_transport_plugins/tags/electric
+    local-name: image_transport_plugins
+- svn:
+    uri: https://code.ros.org/svn/ros-pkg/stacks/image_pipeline/tags/electric
+    local-name: image_pipeline
+

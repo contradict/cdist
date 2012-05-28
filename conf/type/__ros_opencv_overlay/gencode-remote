@@ -1,0 +1,16 @@
+#!/bin/sh
+
+overlay_dir="/opt/ros/opencv_overlay"
+type_file="$__type/files/system_opencv.rosconfig"
+current_md5=`md5sum ${type_file} | cut -d" " -f1`
+installed_md5=$(cat "$__object/explorer/installed_md5")
+
+if [ "${installed_md5}" != "${current_md5}" ]; then
+    cat <<EOF
+. /opt/ros/electric/setup.sh
+cd ${overlay_dir}
+./rosinstall -o . system_opencv.rosconfig
+. ./overlay_setup.sh
+rosmake vision_opencv image_pipeline image_transport_plugins
+EOF
+fi

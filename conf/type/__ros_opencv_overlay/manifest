@@ -1,0 +1,24 @@
+#!/bin/sh
+
+overlay_dir="/opt/ros/opencv_overlay"
+config_file="${overlay_dir}/system_opencv.rosconfig"
+type_file="$__type/files/system_opencv.rosconfig"
+current_md5=`md5sum ${type_file} | cut -d" " -f1`
+installed_md5=$(cat "$__object/explorer/installed_md5")
+
+__ros
+__opencv
+
+if [ "${installed_md5}" != "${current_md5}" ]; then
+    __directory ${overlay_dir} --state present
+    require="__directory/${overlay_dir}" \
+        __file ${config_file} --state present \
+        --source ${type_file}
+    require="__directory/${overlay_dir}" \
+        __file ${overlay_dir}/overlay_setup.sh --state present \
+        --source $__type/files/overlay_setup.sh
+    require="__directory/${overlay_dir}" \
+        __file ${overlay_dir}/rosinstall --state present \
+        --source "$__type/files/rosinstall" \
+        --mode 755
+fi

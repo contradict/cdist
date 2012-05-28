@@ -1,0 +1,9 @@
+#!/bin/sh
+
+config_file="/opt/ros/opencv_overlay/system_opencv.rosconfig"
+
+if [ -f ${config_file} ]; then
+    md5sum ${config_file} | cut -d" " -f1
+else
+    echo "none"
+fi

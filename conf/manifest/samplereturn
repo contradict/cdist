@@ -87,12 +87,16 @@ __package_apt libtbb-dev --state present
 __package_apt libsuitesparse-dev --state present
 
 __ros
-
 require="__ros" __package_apt ros-electric-joystick-drivers --state present
 require="__ros" __package_apt ros-electric-camera-drivers --state present 
 require="__ros" __package_apt ros-electric-dynamixel-motor --state present 
 require="__ros" __package_apt ros-electric-bosch-drivers --state present 
 
 __opencv
+
+__ros_opencv_overlay
+__addifnosuchline rossetup \
+    --line ". /opt/ros/opencv_overlay/overlay_setup.sh" \
+    --file "/etc/bash.bashrc"
 
 __samplereturn_network --ETH0_IP=$ETH0_IP --WLAN_IP=$WLAN_IP
