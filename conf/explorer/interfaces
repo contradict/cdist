@@ -1,7 +1,6 @@
 #!/bin/sh
 #
-# 2011 Steven Armstrong (steven-cdist at armstrong.cc)
-# 2012 Nico Schottelius (nico-cdist at schottelius.org)
+# 2012 Sébastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 #
 # This file is part of cdist.
 #
@@ -18,7 +17,30 @@
 # You should have received a copy of the GNU General Public License
 # along with cdist. If not, see <http://www.gnu.org/licenses/>.
 #
+#
+# List all network interfaces in explorer/ifaces. One interface per line.
+#
+# If your OS is not supported please provide a ifconfig output
+#
 
-# set default: present, if not setup
-statefile="$__object/parameter/state"
-[ -f "$statefile" ] || echo present > "$statefile"
+# Use ip, if available
+if which ip >/dev/null 2>&1; then
+    ip -o link show | sed -n 's/^[0-9]\+: \(.\+\): <.*/\1/p'
+    exit 0
+fi
+
+uname_s="$(uname -s)"
+REGEXP='s/^(.*)(:[[:space:]]*flags=|Link encap).*/\1/p'
+
+case "$uname_s" in
+    Darwin)
+	ifconfig -a | sed -n -E "$REGEXP"
+	;;
+    Linux|*BSD)
+	ifconfig -a | sed -n -r "$REGEXP"
+	;;
+    *)
+	echo "Unsupported ifconfig output for $uname_s" >&2
+	exit 1
+	;;
+esac

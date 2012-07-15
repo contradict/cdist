@@ -29,12 +29,17 @@ fi
 # Get option dstuser if defined
 if [ -f "$__object/parameter/dstuser" ]; then
    dstuser=`cat "$__object/parameter/dstuser"`
+else
+   dstuser="root"
 fi
 # Get option dstgroup if defined
 if [ -f "$__object/parameter/dstgroup" ]; then
    dstgroup=`cat "$__object/parameter/dstgroup"`
 fi
 
+
+# retrieve destination group
+dstgroup=$(cat "$__object/explorer/dstuser_group")
 
 # if a source user is defined, use it's public key
 if [ "$srcuser" ]; then

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # 2011-2012 Nico Schottelius (nico-cdist at schottelius.org)
+# 2012 Steven Armstrong (steven-cdist at armstrong.cc)
 #
 # This file is part of cdist.
 #
@@ -22,6 +23,7 @@
 import argparse
 import logging
 import os
+import sys
 
 import cdist
 from cdist import core
@@ -67,6 +69,7 @@ class Emulator(object):
 
         self.commandline()
         self.setup_object()
+        self.save_stdin()
         self.record_requirements()
         self.record_auto_requirements()
         self.log.debug("Finished %s %s" % (self.cdist_object.path, self.parameters))
@@ -89,12 +92,18 @@ class Emulator(object):
 
         parser = argparse.ArgumentParser(add_help=False, argument_default=argparse.SUPPRESS)
 
-        for parameter in self.cdist_type.optional_parameters:
-            argument = "--" + parameter
-            parser.add_argument(argument, dest=parameter, action='store', required=False)
         for parameter in self.cdist_type.required_parameters:
             argument = "--" + parameter
             parser.add_argument(argument, dest=parameter, action='store', required=True)
+        for parameter in self.cdist_type.required_multiple_parameters:
+            argument = "--" + parameter
+            parser.add_argument(argument, dest=parameter, action='append', required=True)
+        for parameter in self.cdist_type.optional_parameters:
+            argument = "--" + parameter
+            parser.add_argument(argument, dest=parameter, action='store', required=False)
+        for parameter in self.cdist_type.optional_multiple_parameters:
+            argument = "--" + parameter
+            parser.add_argument(argument, dest=parameter, action='append', required=False)
         for parameter in self.cdist_type.boolean_parameters:
             argument = "--" + parameter
             parser.add_argument(argument, dest=parameter, action='store_const', const='')
@@ -137,6 +146,27 @@ class Emulator(object):
         # Record / Append source
         self.cdist_object.source.append(self.object_source)
 
+    chunk_size = 8192
+    def _read_stdin(self):
+        return sys.stdin.buffer.read(self.chunk_size)
+    def save_stdin(self):
+        """If something is written to stdin, save it in the object as
+        $__object/stdin so it can be accessed in manifest and gencode-*
+        scripts.
+        """
+        if not sys.stdin.isatty():
+            try:
+                # go directly to file instead of using CdistObject's api
+                # as that does not support streaming
+                path = os.path.join(self.cdist_object.absolute_path, 'stdin')
+                with open(path, 'wb') as fd:
+                    chunk = self._read_stdin()
+                    while chunk:
+                        fd.write(chunk)
+                        chunk = self._read_stdin()
+            except EnvironmentError as e:
+                raise cdist.Error('Failed to read from stdin: %s' % e)
+
     def record_requirements(self):
         """record requirements"""
 
@@ -160,10 +190,15 @@ class Emulator(object):
     def record_auto_requirements(self):
         """An object shall automatically depend on all objects that it defined in it's type manifest.
         """
-        # __object_name is the name of the object whose type manifest is currenlty executed
+        # __object_name is the name of the object whose type manifest is currently executed
         __object_name = os.environ.get('__object_name', None)
         if __object_name:
-            _object = self.cdist_object.object_from_name(__object_name)
-            # prevent circular dependencies
-            if not _object.name in self.cdist_object.requirements:
-                _object.requirements.append(self.cdist_object.name)
+            # The object whose type manifest is currently run
+            parent = self.cdist_object.object_from_name(__object_name)
+            # The object currently being defined
+            current_object = self.cdist_object
+            # As parent defined current_object it shall automatically depend on it.
+            # But only if the user hasn't said otherwise.
+            # Must prevent circular dependencies.
+            if not parent.name in current_object.requirements:
+                parent.autorequire.append(current_object.name)

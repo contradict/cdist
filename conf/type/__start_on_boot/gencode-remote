@@ -19,10 +19,10 @@
 #
 #
 
-state_should="$(cat "$__object/parameter/state")"
+state_should="$(cat "$__object/parameter/state" 2>/dev/null || echo present)"
 state_is=$(cat "$__object/explorer/state")
 
-# Nothing todo, go away
+# Short circuit if nothing is to be done
 [ "$state_should" = "$state_is" ] && exit 0
 
 os=$(cat "$__global/explorer/os")
@@ -32,7 +32,8 @@ case "$state_should" in
     present)
         case "$os" in
             archlinux)
-                echo "sed -i 's/^\\(DAEMONS=.*\\))/\\1 $name)/' /etc/rc.conf"
+                echo "sed 's/^\\(DAEMONS=.*\\))/\\1 $name)/' /etc/rc.conf > /etc/rc.conf.cdist-tmp"
+                echo "mv /etc/rc.conf.cdist-tmp /etc/rc.conf"
             ;;
             debian|ubuntu)
                 echo "update-rc.d \"$name\" defaults >/dev/null"
@@ -43,7 +44,7 @@ case "$state_should" in
 #                echo rc-update add \"$name\" default
 #            ;;
 
-            amazon|centos|fedora|owl|redhat)
+            amazon|centos|fedora|owl|redhat|suse)
                 echo chkconfig \"$name\" on
             ;;
 
@@ -66,7 +67,8 @@ case "$state_should" in
             archlinux)
                 # Replace a) at the beginning b) in the middle c) end d) only
                 # Support @name as well...makes it more ugly, but well...
-                echo "sed -i /etc/rc.conf -e 's/^\\(DAEMONS=(\\)@\\{0,1\\}$name /\\1/' -e 's/^\\(DAEMONS=(.* \\)@\\{0,1\\}$name \\(.*\\)/\\1\\2/' -e 's/^\\(DAEMONS=(.*\\) @\\{0,1\\}$name)/\\1)/' -e 's/^\\(DAEMONS=(\\)@\\{0,1\\}$name)/\\1)/'"
+                echo "sed /etc/rc.conf -e 's/^\\(DAEMONS=(\\)@\\{0,1\\}$name /\\1/' -e 's/^\\(DAEMONS=(.* \\)@\\{0,1\\}$name \\(.*\\)/\\1\\2/' -e 's/^\\(DAEMONS=(.*\\) @\\{0,1\\}$name)/\\1)/' -e 's/^\\(DAEMONS=(\\)@\\{0,1\\}$name)/\\1)/' > /etc/rc.conf.cdist-tmp"
+                echo "mv /etc/rc.conf.cdist-tmp /etc/rc.conf"
             ;;
             debian|ubuntu)
                 echo update-rc.d -f \"$name\" remove
@@ -77,7 +79,7 @@ case "$state_should" in
 #                echo rc-update del \"$name\"
 #            ;;
 
-            centos|fedora|owl|redhat)
+            centos|fedora|owl|redhat|suse)
                 echo chkconfig \"$name\" off
             ;;
 

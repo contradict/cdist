@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# 2011 Nico Schottelius (nico-cdist at schottelius.org)
+# 2012 Nico Schottelius (nico-cdist at schottelius.org)
 #
 # This file is part of cdist.
 #
@@ -18,8 +18,14 @@
 # along with cdist. If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Manage packages with yum (mostly Fedora)
+# Manage packages with Zypper (mostly suse)
 #
+
+# Debug
+# exec >&2
+# set -x
+
+globalopts="--quiet --non-interactive"
 
 if [ -f "$__object/parameter/name" ]; then
    name="$__object/parameter/name"
@@ -27,25 +33,20 @@ else
    name="$__object_id"
 fi
 
-state="$(cat "$__object/parameter/state")"
+state_should="$(cat "$__object/parameter/state")"
 
-opts="-n -q"
+# Exit if nothing is needed to be done
+[ "$state_is" = "$state_should" ] && exit 0
 
-not_installed="^no package provides"
-
-case "$state" in
-   installed)
-      if grep -q "$not_installed" "$__object/explorer/pkg_version"; then
-         echo zypper $opts install \"$name\"
-      fi
+case "$state_should" in
+   present)
+         echo zypper "$globalopts" install --auto-agree-with-licenses \"$name\"
    ;;
-   removed)
-      if ! grep -q "$not_installed" "$__object/explorer/pkg_version"; then
-         echo zypper $opts remove \"$name\"
-      fi
+   absent)
+         echo pacman "$globalopts" remove \"$name\"
    ;;
    *)
-      echo "Unknown state: $state" >&2
+      echo "Unknown state: $state_should" >&2
       exit 1
    ;;
 esac
