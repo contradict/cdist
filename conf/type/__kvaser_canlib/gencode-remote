@@ -11,12 +11,13 @@ lib_installed="$(cat "$__object/explorer/lib_installed")"
 
 if [ "${lib_installed}" = "absent" ]; then
     # echo "unpacking" >&2
-    echo "cd /usr/local/src || exit 1"
-    echo "rm -fr linuxcan_v4"
-    echo "tar -xzf ${tarfile} || exit 1"
-    echo "cd linuxcan_v4 || exit 1"
-    echo "make canlib_install || exit 1"
-    echo "touch cdist_canlib_${version} || exit 1"
+    echo "cd /usr/local/src"
+    echo "rm -fr linuxcan"
+    echo "tar -xzf ${tarfile}"
+    echo "cd linuxcan"
+    echo "make canlib"
+    echo "make -C canlib install"
+    echo "touch cdist_canlib_${version}"
 fi
 
 if [ -f "$__object/parameter/devices" ]; then
@@ -27,8 +28,11 @@ if [ -f "$__object/parameter/devices" ]; then
     for dev in $devices; do
         if ! $( echo ${installed_devs} | grep -q cdist_canlib_${dev}_${version} ); then
             # echo "installing cdist_canlib_${dev}_${version}" >&2
-            echo "cd /usr/local/src/linuxcan_v4 || exit 1"
-            echo "make ${dev}_install || exit 1"
+            echo "cd /usr/local/src/linuxcan"
+            echo "make ${dev}"
+            echo "cd ${dev}"
+            echo "./installscript.sh"
+            echo "cd ../"
             echo "touch cdist_canlib_${dev}_${version} || exit 1"
         fi
     done
