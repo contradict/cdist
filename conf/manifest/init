@@ -14,5 +14,7 @@ case "$__target_host" in
         export WLAN_IP="192.168.200.21"
         . $__manifest/samplereturn
         ;;
-
+    fordson*)
+        . $__manifest/samplereturn-dev
+        ;;
 esac
