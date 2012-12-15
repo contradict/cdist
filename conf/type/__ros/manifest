@@ -11,7 +11,17 @@ __apt_add_repository --repository http://packages.ros.org/ros/ubuntu \
                      --keyurl http://packages.ros.org/ros.key \
                      rosrepo
 
+rname=ros-${distribution}
+
 require="__apt_add_repository/rosrepo "\
-    __package_apt ros-${distribution}-desktop-full --state present
+    __package_apt ${rname}-desktop-full --state present
 
+extrapackages="
+${rname}-camera-1394
+python-rosinstall
+"
 
+for pkg in ${extrapackages}; do
+    require="__package_apt/${rname}-desktop-full"\
+        __package_apt ${pkg} --state present
+done
