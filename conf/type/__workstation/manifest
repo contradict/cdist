@@ -23,8 +23,6 @@ texlive
 screen
 byobu
 tmux
-imagemagick
-imagemagick-doc
 smbfs
 python-dev
 gfortran
@@ -33,11 +31,30 @@ python-scipy
 python-matplotlib
 ipython
 python-pip
+python-wxtools
 cython
+swig
 sshfs
 htop
 apt-file
 acpi
+cmake
+vlc
+x11vnc
+graphicsmagick-imagemagick-compat
+gkrellm
+pidgin
+pidgin-otr
+pidgin-encryption
+pidgin-latex
+virtualbox
+pulseaudio-module-zeroconf
+paman
+paprefs
+pavucontrol
+bwm-ng
+gscanbus
+network-manager-vpnc
 "
 
 for pkg in $packages
