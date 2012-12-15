@@ -1,0 +1,24 @@
+#!/bin/bash
+
+__workstation
+
+__package wakeonlan --state present
+
+__addifnosuchline modules_acpiphp \
+    --line "acpiphp" \
+    --file "/etc/modules"
+
+__kvaser_canlib --tarname "linuxcan" --version "_BETA_20120702" --devices "leaf"
+
+__package_apt libtbb-dev --state present
+__package_apt libsuitesparse-dev --state present
+
+__ros --distribution fuerte
+require="__ros" __package_apt ros-fuerte-joystick-drivers --state present
+require="__ros" __package_apt ros-fuerte-camera-drivers --state present 
+require="__ros" __package_apt ros-fuerte-dynamixel-motor --state present 
+require="__ros" __package_apt ros-fuerte-bosch-drivers --state present 
+
+__opencv
+
+
