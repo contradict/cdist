@@ -81,7 +81,7 @@ __addifnosuchline modules_acpiphp \
     --line "acpiphp" \
     --file "/etc/modules"
 
-__kvaser_canlib --tarname "linuxcan" --version "4.78-3" --devices "leaf"
+__kvaser_canlib --tarname "linuxcan" --version "BETA_20120702" --devices "leaf"
 
 __package_apt libtbb-dev --state present
 __package_apt libsuitesparse-dev --state present
