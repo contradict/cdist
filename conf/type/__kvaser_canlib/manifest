@@ -4,6 +4,6 @@ tarfile="$(cat "$__object/parameter/tarname")""$(cat "$__object/parameter/versio
 
 __file /usr/local/src/${tarfile} \
     --source ${__type}/files/${tarfile} \
-    --owner robot \
-    --group robot
+    --owner root \
+    --group root
 
