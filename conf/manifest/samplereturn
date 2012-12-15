@@ -86,11 +86,11 @@ __kvaser_canlib --tarname "linuxcan" --version "BETA_20120702" --devices "leaf"
 __package_apt libtbb-dev --state present
 __package_apt libsuitesparse-dev --state present
 
-__ros
-require="__ros" __package_apt ros-electric-joystick-drivers --state present
-require="__ros" __package_apt ros-electric-camera-drivers --state present 
-require="__ros" __package_apt ros-electric-dynamixel-motor --state present 
-require="__ros" __package_apt ros-electric-bosch-drivers --state present 
+__ros --distribution fuerte
+require="__ros" __package_apt ros-fuerte-joystick-drivers --state present
+require="__ros" __package_apt ros-fuerte-camera-drivers --state present
+require="__ros" __package_apt ros-fuerte-dynamixel-motor --state present
+require="__ros" __package_apt ros-fuerte-bosch-drivers --state present
 
 __opencv
 
