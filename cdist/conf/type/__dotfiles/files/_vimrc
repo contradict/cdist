@@ -33,3 +33,9 @@ set foldenable
 "Set space to toggle a fold
 nnoremap <space> za
 
+highlight TrailingSpaces ctermbg=red
+match TrailingSpaces / *$/
+
+au BufNewFile,BufRead *.ino set filetype=cpp
+
+au BufRead,BufNewFile *.go set makeprg=go\ build
