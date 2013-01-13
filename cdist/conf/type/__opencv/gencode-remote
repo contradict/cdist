@@ -1,6 +1,19 @@
 #!/bin/bash
-if [ "$(cat $__object/explorer/exists)" = "none" ]; then
-	echo "sh -c /tmp/build_opencv.sh"
-	echo "rm /tmp/build_opencv.sh"
+
+if [ -e $__object/parameter/version ]; then
+    version=$( cat $__object/parameter/version )
+else
+    version="2.4.3"
 fi
 
+installed_version=$(cat $__object/explorer/exists)
+
+if [ ${installed_version} = ${version} ]; then
+    exit 0;
+fi
+
+echo <<EOF
+chmod +x /tmp/build_opencv.sh
+/tmp/build_opencv.sh ${version}
+rm /tmp/build_opencv.sh
+EOF

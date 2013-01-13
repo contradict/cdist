@@ -16,7 +16,6 @@ libavbin-dev
 libswscale-dev
 libavformat-dev
 libtbb-dev
-libxine-dev
 libgstreamer-plugins-base0.10-dev
 libv4l-dev
 python-sphinx
@@ -27,16 +26,30 @@ do
     __package $pkg --state present
 done
 
-if [ "$(cat $__object/explorer/exists)" = "none" ]; then
-    echo "copying build script..." >&2
-    __file /tmp/build_opencv.sh --state present \
-        --source "$__type/files/build_opencv.sh"
-    # assuming cuda is installed with the nvidia tools, these
-    # need to be added manually
-    __file /etc/profile.d/cudapath.sh --state present \
-        --source "$__type/files/cudapath.sh"
-    __file /etc/ld.so.conf.d/cuda.conf --state present \
-        --source "$__type/files/cuda.conf"
-    __file /tmp/opencv.pc --state present \
-        --source "$__type/files/opencv.pc"
+__nvidia_cuda --state present \
+    --download \
+    --force_ubuntu_release=11.10 \
+    --update=1 \
+    --version=5.0.35
+
+if [ -e $__object/parameter/version ]; then
+    version=$( cat $__object/parameter/version )
+else
+    version="2.4.3"
 fi
+
+installed_version=$(cat $__object/explorer/exists)
+
+if [ ${installed_version} = ${version} ]; then
+    exit 0;
+fi
+
+__file /tmp/build_opencv.sh --state present \
+    --source "$__type/files/build_opencv.sh"
+export version
+mkdir -p $__object/files
+"$__type/templates/opencv.pc.sh" > "$__object/files/opencv.pc"
+__directory /usr/local/lib/pkgconfig --state present
+require="__directory/usr/local/lib/pkgconfig" \
+    __file /usr/local/lib/pkgconfig/opencv.pc --state present \
+    --source "$__type/files/opencv.pc"
