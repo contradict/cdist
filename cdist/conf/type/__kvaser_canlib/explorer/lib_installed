@@ -2,7 +2,7 @@
 
 version="$(cat "$__object/parameter/version")"
 
-if [ -f "/usr/local/src/linuxcan_v4/cdist_canlib_${version}" ]; then
+if [ -f "/usr/local/src/linuxcan/cdist_canlib_${version}" ]; then
     echo "present"
 else
     echo "absent"

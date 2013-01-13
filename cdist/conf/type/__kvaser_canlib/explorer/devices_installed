@@ -1,5 +1,5 @@
 #!/bin/bash
 
-if [ -d /usr/local/src/linuxcan_v4 ]; then
-    find /usr/local/src/linuxcan_v4/ -name '*cdist_canlib_*_*' | cut -d'/' -f6-
+if [ -d /usr/local/src/linuxcan ]; then
+    find /usr/local/src/linuxcan/ -name '*cdist_canlib_*_*' | cut -d'/' -f6-
 fi
