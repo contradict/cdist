@@ -1,0 +1,7 @@
+#!/bin/bash
+
+verfile="/usr/local/cuda/.cdist_cudaversion"
+
+if [ -e ${verfile} ]; then
+    cat ${verfile}
+fi

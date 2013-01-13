@@ -1,0 +1,13 @@
+#!/bin/bash
+
+state_should="$(cat "$__object/parameter/state")"
+
+__file /etc/ld.so.conf.d/nvidia-cuda.conf \
+    --state present \
+    --owner root \
+    --group root \
+    --mode 0644 \
+    --source "$__type/files/nvidia-cuda.conf"
+__file /etc/profile.d/cudapath.sh --state present \
+    --source "$__type/files/cudapath.sh"
+

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+. $__type/files/setup.sh
+if [ "$state_should" = "present" ]; then
+    if [ -f "$__object/parameter/download" ]; then
+        #http://developer.download.nvidia.com/compute/cuda/5_0/rel-update-1/installers/
+        download_url="http://developer.download.nvidia.com/compute/cuda/${version_major}_${version_minor}/rel${rel}/installers"
+        source_path="$__type/files/$filename"
+        if [ ! -f "$source_path" ]; then
+            mkdir -p "$__type/files"
+            wget -O "$source_path" "$download_url/$filename"
+        fi
+    elif [ -f "$__object/parameter/source" ]; then
+        source_path=$(cat "$__object/parameter/source")
+    fi
+
+    echo "$__remote_copy" "$source_path" "${__target_host}:/tmp/"
+    #echo "$__remote_copy" "$__type/files/look-harder-for-libraries.patch" "${__target_host}:/tmp/"
+fi

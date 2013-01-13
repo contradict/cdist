@@ -1,0 +1,31 @@
+#!/bin/bash
+
+. $__type/files/setup.sh
+echo $filename >&2
+echo $state_should >&2
+case "$state_should" in
+    present)
+        echo "( \
+                if [ -L /usr/local/cuda ]; then \
+                    rm /usr/local/cuda; \
+                elif [ -e /usr/local/cuda ]; then \
+                    stamp=$( date +%Y%m%d%H%M%S ); \
+                    mv /usr/local/cuda /usr/local/cuda-orig-${stamp}; \
+                fi; \
+                chmod +x /tmp/${filename}; \
+                /tmp/${filename} -toolkit -silent; \
+                ln -s /usr/local/cuda-${version_major}.${version_minor} /usr/local/cuda; \
+                ldconfig; \
+                echo ${version} >/usr/local/cuda/.cdist_cudaversion; \
+                cd /usr/share/cmake-2.8/Modules; \
+                patch -sN -p1 </tmp/look-harder-for-libraries.patch || true; \
+              )";
+    ;;
+    absent)
+        echo "echo 'CUDA uninstall not yet implemented!'" >&2
+    ;;
+    *)
+        echo "Unknown state: $state_should" >&2
+        exit 1
+    ;;
+esac

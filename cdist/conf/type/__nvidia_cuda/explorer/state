@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -d "/usr/local/cuda" ]; then
+    echo "present"
+else
+    echo "absent"
+fi
