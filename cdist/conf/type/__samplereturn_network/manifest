@@ -26,7 +26,7 @@ else
 	__file /etc/network/interfaces --source "$__object/files/interfaces"
 fi
 
-__addifnosuchline nameserver \
+__line nameserver \
     --file /etc/resolv.conf \
     --line 'nameserver 10.10.10.10'
 
