@@ -1,31 +1,55 @@
 #!/bin/bash
 
-__workstation
+packages="
+git-all
+terminator
+tmux
+gscanbus
+nvidia-current-updates
+"
 
-__package wakeonlan --state present
+__package nvidia-experimental-310 --state absent
+__package nvidia-settings-experimental-310 --state absent
 
-__user --home /home/robot \
-       --groups "adm,dialout,cdrom,plugdev,lpadmin,admin,sambashare,video" \
-       --shell /bin/bash \
-       robot
+for pkg in $packages
+do
+    __package $pkg --state present
+done
+
+# must manually create user first
+# since dependency resolution does not work
+__user robot \
+       --home /home/robot \
+       --shell /bin/bash
+
+require="__user/robot" \
+       __user_groups robot-groups \
+       --user robot \
+       --group adm \
+       --group dialout \
+       --group cdrom \
+       --group plugdev \
+       --group lpadmin \
+       --group sambashare \
+       --group video
+
 require="__user/robot" \
     __directory /home/robot \
     --owner robot \
     --group robot \
     --mode 755
 
-require="__directory/home/robot" \
-    __ssh_authorized_key \
-    --srcfile $__manifest/files/robot_rsa.pub \
-    --dstuser robot \
+require="__user/robot" \
+    __ssh_authorized_keys \
+    --key "$(cat $__manifest/files/robot_rsa.pub)" \
     robot
-require="__ssh_authorized_key/robot" \
+require="__ssh_authorized_keys/robot" \
     __file /home/robot/.ssh/robot_rsa \
     --group robot \
     --mode 600 \
     --owner robot \
     --source $__manifest/files/robot_rsa
-require="__ssh_authorized_key/robot" \
+require="__ssh_authorized_keys/robot" \
     __file /home/robot/.ssh/robot_rsa.pub \
     --group robot \
     --mode 600 \
@@ -33,11 +57,11 @@ require="__ssh_authorized_key/robot" \
     --source $__manifest/files/robot_rsa.pub
 
 require="__user/robot" \
-    __addifnosuchline autologin_user \
+    __line autologin_user \
     --file /etc/lightdm/lightdm.conf \
     --line 'autologin-user=robot'
 require="__user/robot" \
-    __addifnosuchline autologin_timeout \
+    __line autologin_timeout \
     --file /etc/lightdm/lightdm.conf \
     --line 'autologin-user-timeout=0'
 
@@ -56,47 +80,31 @@ require="__directory/home/robot/.config/autostart" \
     --group robot \
     --mode 777
 
-require="__user/robot" \
-    __gsettings aclidaction \
-    --user robot \
-    --schema org.gnome.settings-daemon.plugins.power \
-    --key lid-close-ac-action \
-    --value nothing
-require="__user/robot" \
-    __gsettings battlidaction \
-    --user robot \
-    --schema org.gnome.settings-daemon.plugins.power \
-    --key lid-close-battery-action \
-    --value nothing
-require="__user/robot" \
-    __gsettings noautomount \
-    --user robot \
-    --schema org.gnome.desktop.media-handling \
-    --key automount \
-    --value false
+#require="__user/robot" \
+#    __gsettings noautomount \
+#    --user robot \
+#    --schema org.gnome.desktop.media-handling \
+#    --key automount \
+#    --value false
 require="__user/robot" \
     __dotfiles robot
 
-__addifnosuchline modules_acpiphp \
-    --line "acpiphp" \
-    --file "/etc/modules"
-
-__kvaser_canlib --tarname "linuxcan" --version "BETA_20120702" --devices "leaf"
+__kvaser_canlib --tarname "linuxcan" --version "_BETA_20120702" --devices "leaf"
 
 __package_apt libtbb-dev --state present
 __package_apt libsuitesparse-dev --state present
 
-__ros --distribution fuerte
-require="__ros" __package_apt ros-fuerte-joystick-drivers --state present
-require="__ros" __package_apt ros-fuerte-camera-drivers --state present
-require="__ros" __package_apt ros-fuerte-dynamixel-motor --state present
-require="__ros" __package_apt ros-fuerte-bosch-drivers --state present
+__ros --distribution groovy
+require="__ros" __package_apt ros-groovy-joystick-drivers --state present
+require="__ros" __package_apt ros-groovy-camera-drivers --state present
+require="__ros" __package_apt ros-groovy-dynamixel-motor --state present
+#require="__ros" __package_apt ros-groovy-bosch-drivers --state present
 
-__opencv
+__opencv --version=2.4.3
 
-__ros_opencv_overlay
-__addifnosuchline rossetup \
-    --line ". /opt/ros/opencv_overlay/overlay_setup.sh" \
-    --file "/etc/bash.bashrc"
+#__ros_opencv_overlay
+#__line rossetup \
+#    --line ". /opt/ros/opencv_overlay/overlay_setup.sh" \
+#    --file "/etc/bash.bashrc"
 
-__samplereturn_network --ETH0_IP=$ETH0_IP --WLAN_IP=$WLAN_IP
+#__samplereturn_network --ETH0_IP=$ETH0_IP --WLAN_IP=$WLAN_IP

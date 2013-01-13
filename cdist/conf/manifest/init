@@ -8,13 +8,21 @@ case "$__target_host" in
         export ETH0_IP="10.10.180.20"
         export WLAN_IP="192.168.200.20"
         . $__manifest/samplereturn
+        . $__manifest/samplereturn-laptop
         ;;
     moline*)
         export ETH0_IP="10.10.180.21"
         export WLAN_IP="192.168.200.21"
-        . $__manifest/samplereturn
+        . $__manifest/samplereturn-dev
+        . $__manifest/samplereturn-laptop
         ;;
     fordson*)
         . $__manifest/samplereturn-dev
+        . $__manifest/samplereturn-laptop
+        ;;
+    sr1)
+        export ETH0_IP="10.10.180.22"
+        export WLAN_IP="192.168.200.22"
+        . $__manifest/samplereturn
         ;;
 esac

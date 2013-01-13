@@ -1,0 +1,19 @@
+#!/bin/bash
+
+require="__user/robot" \
+    __gsettings aclidaction \
+    --user robot \
+    --schema org.gnome.settings-daemon.plugins.power \
+    --key lid-close-ac-action \
+    --value nothing
+require="__user/robot" \
+    __gsettings battlidaction \
+    --user robot \
+    --schema org.gnome.settings-daemon.plugins.power \
+    --key lid-close-battery-action \
+    --value nothing
+
+__addifnosuchline modules_acpiphp \
+    --line "acpiphp" \
+    --file "/etc/modules"
+
