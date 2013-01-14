@@ -16,7 +16,7 @@ case "$state_should" in
                 ldconfig; \
                 echo ${version} >/usr/local/cuda/.cdist_cudaversion; \
                 cd /usr/share/cmake-2.8/Modules; \
-                patch -sN -p1 </tmp/look-harder-for-libraries.patch || true; \
+                patch -sN -p1 </tmp/look-harder-for-libs.patch || true; \
               )";
     ;;
     absent)
