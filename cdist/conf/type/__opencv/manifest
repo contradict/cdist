@@ -5,7 +5,7 @@
 
 packages="
 cmake
-libjpeg62-dev
+libjpeg-dev
 libpng12-dev
 libtiff4-dev
 libjasper-dev
