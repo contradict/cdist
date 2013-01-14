@@ -2,7 +2,7 @@
 version=$1
 mkdir -p /usr/local/src
 cd /usr/local/src
-wget http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/${version}/OpenCV-${version}.tar.bz2
+wget -q http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/${version}/OpenCV-${version}.tar.bz2
 tar -xjf OpenCV-${version}.tar.bz2
 pushd OpenCV-${version}
 mkdir build
