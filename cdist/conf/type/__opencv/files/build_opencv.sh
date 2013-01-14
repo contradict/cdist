@@ -16,6 +16,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D ENABLE_SSE41=ON \
       -D ENABLE_SSE42=ON \
       -D ENABLE_AVX=ON \
+      -D BUILD_EXAMPLES=ON \
       ..
 make -j8
 make install
