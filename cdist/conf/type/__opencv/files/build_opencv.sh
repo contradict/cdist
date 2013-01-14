@@ -1,7 +1,5 @@
 #!/bin/bash
 version=$1
-echo $0 $1
-echo ${version}
 mkdir -p /usr/local/src
 cd /usr/local/src
 wget http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/${version}/OpenCV-${version}.tar.bz2
