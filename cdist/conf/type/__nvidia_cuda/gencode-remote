@@ -1,8 +1,6 @@
 #!/bin/bash
 
 . $__type/files/setup.sh
-echo $filename >&2
-echo $state_should >&2
 case "$state_should" in
     present)
         echo "( \
