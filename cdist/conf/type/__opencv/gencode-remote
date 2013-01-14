@@ -12,7 +12,7 @@ if [ ${installed_version} = ${version} ]; then
     exit 0;
 fi
 
-echo <<EOF
+cat <<EOF
 chmod +x /tmp/build_opencv.sh
 /tmp/build_opencv.sh ${version}
 rm /tmp/build_opencv.sh
