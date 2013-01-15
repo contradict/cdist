@@ -7,8 +7,8 @@ case "$state_should" in
                 if [ -L /usr/local/cuda ]; then \
                     rm /usr/local/cuda; \
                 elif [ -e /usr/local/cuda ]; then \
-                    stamp=$( date +%Y%m%d%H%M%S ); \
-                    mv /usr/local/cuda /usr/local/cuda-orig-${stamp}; \
+                    stamp=\$( date +%Y%m%d%H%M%S ); \
+                    mv /usr/local/cuda /usr/local/cuda-orig-\${stamp}; \
                 fi; \
                 chmod +x /tmp/${filename}; \
                 /tmp/${filename} -toolkit -silent; \
