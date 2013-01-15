@@ -9,6 +9,8 @@ __file /etc/ld.so.conf.d/nvidia-cuda.conf \
     --mode 0644 \
     --source "$__type/files/nvidia-cuda.conf"
 __file /etc/profile.d/cudapath.sh --state present \
-    --source "$__type/files/cudapath.sh"
+    --source "$__type/files/cudapath.sh" \
+    --mode 0644
 __file /tmp/look-harder-for-libs.patch \
-    --source "$__type/files/look-harder-for-libs.patch"
+    --source "$__type/files/look-harder-for-libs.patch" \
+    --mode 0644

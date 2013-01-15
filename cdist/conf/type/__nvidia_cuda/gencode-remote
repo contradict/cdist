@@ -4,6 +4,7 @@
 case "$state_should" in
     present)
         echo "( \
+                umask 0022
                 if [ -L /usr/local/cuda ]; then \
                     rm /usr/local/cuda; \
                 elif [ -e /usr/local/cuda ]; then \
