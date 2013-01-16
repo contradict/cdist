@@ -25,13 +25,13 @@ __user robot \
 require="__user/robot" \
        __user_groups robot-groups \
        --user robot \
-       --group adm \
        --group dialout \
        --group cdrom \
        --group plugdev \
        --group lpadmin \
        --group sambashare \
-       --group video
+       --group video \
+       --group users
 
 require="__user/robot" \
     __directory /home/robot \
