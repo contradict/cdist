@@ -41,15 +41,18 @@ fi
 installed_version=$(cat $__object/explorer/exists)
 
 if [ ${installed_version} = ${version} ]; then
+    echo "OpenCV-${installed_version} already present" >&2
     exit 0;
 fi
 
 __file /tmp/build_opencv.sh --state present \
-    --source "$__type/files/build_opencv.sh"
+    --source "$__type/files/build_opencv.sh" \
+    --mode 0744
 export version
 mkdir -p $__object/files
 "$__type/templates/opencv.pc.sh" > "$__object/files/opencv.pc"
 __directory /usr/local/lib/pkgconfig --state present
 require="__directory/usr/local/lib/pkgconfig" \
     __file /usr/local/lib/pkgconfig/opencv.pc --state present \
-    --source "$__type/files/opencv.pc"
+    --source "$__type/files/opencv.pc" \
+    --mode 0644

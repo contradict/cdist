@@ -1,9 +1,12 @@
 #!/bin/bash
 version=$1
+umask 0022
 mkdir -p /usr/local/src
 cd /usr/local/src
 wget -q http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/${version}/OpenCV-${version}.tar.bz2
-tar -xjf OpenCV-${version}.tar.bz2
+tar -xjf OpenCV-${version}.tar.bz2 --no-same-owner
+chgrp -R users OpenCV-${version}
+chmod g+rX OpenCV-${version}
 pushd OpenCV-${version}
 mkdir build
 cd build

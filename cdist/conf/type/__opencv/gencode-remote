@@ -13,6 +13,7 @@ if [ ${installed_version} = ${version} ]; then
 fi
 
 cat <<EOF
+umask 0022
 chmod +x /tmp/build_opencv.sh
 /tmp/build_opencv.sh ${version}
 rm /tmp/build_opencv.sh
