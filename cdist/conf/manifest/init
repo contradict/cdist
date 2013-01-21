@@ -20,7 +20,7 @@ case "$__target_host" in
         . $__manifest/samplereturn-dev
         . $__manifest/samplereturn-laptop
         ;;
-    sr1)
+    sr?)
         export ETH0_IP="10.10.180.22"
         export WLAN_IP="192.168.200.22"
         . $__manifest/samplereturn
