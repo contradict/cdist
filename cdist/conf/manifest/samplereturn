@@ -95,10 +95,18 @@ __package_apt libtbb-dev --state present
 __package_apt libsuitesparse-dev --state present
 
 __ros --distribution groovy
-require="__ros" __package_apt ros-groovy-joystick-drivers --state present
-require="__ros" __package_apt ros-groovy-camera-drivers --state present
-require="__ros" __package_apt ros-groovy-dynamixel-motor --state present
-#require="__ros" __package_apt ros-groovy-bosch-drivers --state present
+ros_extra_packages="
+ros-groovy-camera-drivers
+ros-groovy-joystick-drivers
+ros-groovy-dynamixel-motor
+ros-groovy-object-recognition-core
+ros-groovy-object-recognition-capture
+ros-groovy-object-recognition-linemod
+ros-groovy-object-recognition-msgs
+"
+for ros_pkg in ${ros_extra_packages}; do
+    require="__ros" __package_apt ${ros_pkg} --state present
+done
 
 __opencv --version=2.4.3
 
