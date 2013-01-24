@@ -22,9 +22,11 @@ case "$state_should" in
         if [ "$keyurl" != "" ]; then
             echo "wget "$keyurl" -O - | apt-key add -"
         fi
+        echo "apt-get update"
     ;;
     absent)
         echo "apt-add-repository --remove \"$name\""
+        echo "apt-get update"
     ;;
     *)
         echo "Unknown state: $state_should" >$2
