@@ -117,4 +117,4 @@ __opencv --version=2.4.3
 #    --line ". /opt/ros/opencv_overlay/overlay_setup.sh" \
 #    --file "/etc/bash.bashrc"
 
-#__samplereturn_network --ETH0_IP=$ETH0_IP --WLAN_IP=$WLAN_IP
+__samplereturn_network --WIRED_IP=$WIRED_IP --WIRELESS_IP=$WIRELESS_IP

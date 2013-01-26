@@ -1,0 +1,4 @@
+192.168.180.31 sr1-internal
+192.168.180.32 sr2-internal
+192.168.200.31 sr1-wireless
+192.168.200.32 sr2-wireless

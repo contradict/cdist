@@ -6,18 +6,21 @@ cat <<EOF
 auto lo
 iface lo inet loopback
 
-auto eth0
-iface eth0 inet static
- address ${ETH0_IP}
- netmask ${ETH0_NM}
- gateway ${ETH0_GW}
-
+auto ${WIRED_INTERFACE}
+iface ${WIRED_INTERFACE} inet static
+ address ${WIRED_IP}
+ netmask ${WIRED_NM}
+EOF
+if [ -n "${WIRED_GW}" ]; then
+    echo "gateway ${WIRED_GW}"
+fi
+cat <<EOF
 auto wlan0
 iface wlan0 inet static
   wireless-mode ad-hoc
-  wireless-channel ${WLAN_CHANNEL}
-  wireless-essid ${WLAN_SSID}
-  wireless-key ${WLAN_KEY}
-  address ${WLAN_IP}
-  netmask ${WLAN_NM}
+  wireless-channel ${WIRELESS_CHANNEL}
+  wireless-essid ${WIRELESS_SSID}
+  wireless-key ${WIRELESS_KEY}
+  address ${WIRELESS_IP}
+  netmask ${WIRELESS_NM}
 EOF
