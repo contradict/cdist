@@ -5,7 +5,9 @@ git-all
 terminator
 tmux
 gscanbus
+coriander
 nvidia-current-updates
+htop
 "
 
 __package nvidia-experimental-310 --state absent
