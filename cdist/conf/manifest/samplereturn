@@ -92,6 +92,15 @@ require="__directory/home/robot/.config/autostart" \
 require="__user/robot" \
     __dotfiles robot
 
+require="__user/robot" \
+    __git /home/robot/Desktop/SampleReturn \
+        --source git://github.com/contradict/SampleReturn.git \
+        --branch master \
+        --owner robot \
+        --group robot \
+        --mode u+rwX,g+rwX,o+rX
+
+
 __kvaser_canlib --tarname "linuxcan" --version "_BETA_20120702" --devices "leaf"
 
 __package_apt libtbb-dev --state present
