@@ -8,6 +8,7 @@ gscanbus
 coriander
 nvidia-current-updates
 htop
+libgphoto2-2-dev
 "
 
 __package nvidia-experimental-310 --state absent
