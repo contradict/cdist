@@ -60,36 +60,6 @@ require="__ssh_authorized_keys/robot" \
     --source $__manifest/files/robot_rsa.pub
 
 require="__user/robot" \
-    __line autologin_user \
-    --file /etc/lightdm/lightdm.conf \
-    --line 'autologin-user=robot'
-require="__user/robot" \
-    __line autologin_timeout \
-    --file /etc/lightdm/lightdm.conf \
-    --line 'autologin-user-timeout=0'
-
-require="__user/robot" \
-    __directory /home/robot/.config \
-    --owner robot \
-    --group robot
-require="__directory/home/robot/.config" \
-    __directory /home/robot/.config/autostart \
-    --owner robot \
-    --group robot
-require="__directory/home/robot/.config/autostart" \
-    __file /home/robot/.config/autostart/roscore.desktop \
-    --source $__manifest/files/roscore.desktop \
-    --owner robot \
-    --group robot \
-    --mode 777
-
-#require="__user/robot" \
-#    __gsettings noautomount \
-#    --user robot \
-#    --schema org.gnome.desktop.media-handling \
-#    --key automount \
-#    --value false
-require="__user/robot" \
     __dotfiles robot
 
 require="__user/robot" \
@@ -100,6 +70,10 @@ require="__user/robot" \
         --group robot \
         --mode u+rwX,g+rwX,o+rX
 
+require="__user/robot" \
+    __line startuprobot \
+        --file /etc/rc.local \
+        --line ". /home/robot/Desktop/SampleReturn/src/scripts/rc.robot"
 
 __kvaser_canlib --tarname "linuxcan" --version "_BETA_20120702" --devices "leaf"
 
@@ -136,3 +110,4 @@ __samplereturn_network --WIRED_IP=$WIRED_IP --WIRELESS_IP=$WIRELESS_IP
 
 __file /etc/udev/rules.d/80-hotplug-wlan.rules \
     --source $__manifest/files/80-hotplug-wlan.rules
+
