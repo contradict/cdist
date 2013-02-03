@@ -1,0 +1,3 @@
+SUBSYSTEM=="net", ACTION=="add", KERNEL=="wlan*", RUN+="/sbin/ifup $name"
+SUBSYSTEM=="net", ACTION=="remove", KERNEL=="wlan*", RUN+="/sbin/ifdown $name"
+

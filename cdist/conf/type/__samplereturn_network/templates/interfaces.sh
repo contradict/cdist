@@ -6,16 +6,24 @@ cat <<EOF
 auto lo
 iface lo inet loopback
 
+auto eth0
+iface eth0 inet dhcp
+
 auto ${WIRED_INTERFACE}
 iface ${WIRED_INTERFACE} inet static
  address ${WIRED_IP}
  netmask ${WIRED_NM}
 EOF
+if [ -n "${WIRED_ROUTES}" ]; then
+echo ${WIRED_ROUTES}
+fi
+
 if [ -n "${WIRED_GW}" ]; then
     echo "gateway ${WIRED_GW}"
 fi
+if [ -n "${WIRELESS_IP}" ]; then
 cat <<EOF
-auto wlan0
+allow-hotplug wlan0
 iface wlan0 inet static
   wireless-mode ad-hoc
   wireless-channel ${WIRELESS_CHANNEL}
@@ -24,3 +32,5 @@ iface wlan0 inet static
   address ${WIRELESS_IP}
   netmask ${WIRELESS_NM}
 EOF
+fi
+
