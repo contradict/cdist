@@ -99,6 +99,8 @@ ros-groovy-object-recognition-core
 ros-groovy-object-recognition-capture
 ros-groovy-object-recognition-linemod
 ros-groovy-object-recognition-msgs
+ros-groovy-navigation
+ros-groovy-rqt-nav-view
 "
 for ros_pkg in ${ros_extra_packages}; do
     require="__ros" __package_apt ${ros_pkg} --state present
