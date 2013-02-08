@@ -9,6 +9,7 @@ coriander
 nvidia-current-updates
 htop
 libgphoto2-2-dev
+vim-nox
 "
 
 __package nvidia-experimental-310 --state absent
