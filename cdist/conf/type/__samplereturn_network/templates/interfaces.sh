@@ -6,21 +6,22 @@ cat <<EOF
 auto lo
 iface lo inet loopback
 
-auto eth0
-iface eth0 inet dhcp
-
 auto ${WIRED_INTERFACE}
 iface ${WIRED_INTERFACE} inet static
  address ${WIRED_IP}
  netmask ${WIRED_NM}
 EOF
-if [ -n "${WIRED_ROUTES}" ]; then
-echo ${WIRED_ROUTES}
+if [ -n "${WIRED_GW}" ]; then
+    echo " gateway ${WIRED_GW}"
 fi
 
-if [ -n "${WIRED_GW}" ]; then
-    echo "gateway ${WIRED_GW}"
+if [ -n "${WIRED_NS}" ]; then
+    echo " nameserver ${WIRED_NS}"
 fi
+if [ -n "${WIRED_ROUTES}" ]; then
+    echo ${WIRED_ROUTES}
+fi
+
 if [ -n "${WIRELESS_IP}" ]; then
 cat <<EOF
 allow-hotplug wlan0

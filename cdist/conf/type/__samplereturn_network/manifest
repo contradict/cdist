@@ -7,16 +7,17 @@ while read host; do
         ${__target_host}-wireless*)
             WIRELESS_IP=$1
             ;;
-        ${__target_host}-internal*)
+        ${__target_host})
             WIRED_IP=$1
             ;;
     esac
 done < "$__type/files/hosts"
 export WIRED_IP WIRELESS_IP
 
-export WIRED_INTERFACE="eth0:1"
+export WIRED_INTERFACE="eth0"
 export WIRED_NM="255.255.255.0"
-export WIRED_GW=""
+export WIRED_GW="10.10.1.1"
+export WIRED_NS="10.10.10.10"
 export WIRELESS_CHANNEL="4"
 export WIRELESS_SSID="survey"
 export WIRELESS_KEY="752ac5142d"
@@ -24,6 +25,7 @@ export WIRELESS_NM="255.255.255.0"
 if [ "$(cat $__object/explorer/${WIRED_INTERFACE}_address)" = "${WIRED_IP}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_gateway)" = "${WIRED_GW}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_netmask)" = "${WIRED_NM}" -a \
+	 "$(cat $__object/explorer/${WIRED_INTERFACE}_nameserver)" = "${WIRED_NS}" -a \
 	 "$(cat $__object/explorer/wlan0_address)" = "${WIRELESS_IP}" -a \
 	 "$(cat $__object/explorer/wlan0_netmask)" = "${WIRELESS_NM}" -a \
 	 "$(cat $__object/explorer/wlan0_wireless-channel)" = "${WIRELESS_CHANNEL}" -a \
@@ -36,6 +38,11 @@ else
 	mkdir -p "$__object/files"
 	"$__type/templates/interfaces.sh" > "$__object/files/interfaces"
 	__file /etc/network/interfaces --source "$__object/files/interfaces"
+fi
+
+if [ -n "${WIRELESS_IP}" ]; then
+    __file /etc/udev/rules.d/80-hotplug-wlan.rules \
+        --source $__manifest/files/80-hotplug-wlan.rules
 fi
 
 __file /etc/ethers --source "$__type/files/ethers"
