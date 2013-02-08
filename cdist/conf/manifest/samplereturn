@@ -34,7 +34,8 @@ require="__user/robot" \
        --group lpadmin \
        --group sambashare \
        --group video \
-       --group users
+       --group users \
+       --group sudo
 
 require="__user/robot" \
     __directory /home/robot \
