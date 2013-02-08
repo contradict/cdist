@@ -75,6 +75,14 @@ require="__user/robot" \
         --file /etc/rc.local \
         --line ". /home/robot/Desktop/SampleReturn/src/scripts/rc.robot"
 
+__line robot_nofile_hard \
+    --file /etc/security/limits.conf \
+    --line "robot           hard    nofile          65535"
+__line robot_nofile_soft \
+    --file /etc/security/limits.conf \
+    --line "robot           soft    nofile          65535"
+
+
 __kvaser_canlib --tarname "linuxcan" --version "_BETA_20120702" --devices "leaf"
 
 __package_apt libtbb-dev --state present
