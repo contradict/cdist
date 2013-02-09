@@ -16,7 +16,7 @@ if [ -n "${WIRED_GW}" ]; then
 fi
 
 if [ -n "${WIRED_NS}" ]; then
-    echo " nameserver ${WIRED_NS}"
+    echo " dns-nameservers ${WIRED_NS}"
 fi
 if [ -n "${WIRED_ROUTES}" ]; then
     echo ${WIRED_ROUTES}
