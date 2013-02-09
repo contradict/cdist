@@ -114,9 +114,11 @@ __opencv --version=2.4.3
 #    --file "/etc/bash.bashrc"
 
 if [ ${__target_host} = "sr2" ]; then
-WIRED_ROUTES="  up route add -net 192.168.180.0 netmask 255.255.255.0 gw 10.10.180.31\
-  down route del -net 192.168.180.0 netmask 255.255.255.0 gw 10.10.180.31\
+WIRED_ROUTES="
+ up route add -net 192.168.180.0 netmask 255.255.255.0 gw 10.10.180.31
+ down route del -net 192.168.180.0 netmask 255.255.255.0 gw 10.10.180.31
 "
+export WIRED_ROUTES
 fi
 __samplereturn_network
 
