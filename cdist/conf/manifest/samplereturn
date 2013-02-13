@@ -9,7 +9,6 @@ coriander
 nvidia-current-updates
 htop
 libgphoto2-2-dev
-vim-nox
 "
 
 __package nvidia-experimental-310 --state absent
@@ -72,11 +71,6 @@ require="__user/robot" \
         --group robot \
         --mode u+rwX,g+rwX,o+rX
 
-require="__user/robot" \
-    __line startuprobot \
-        --file /etc/rc.local \
-        --line ". /home/robot/Desktop/SampleReturn/src/scripts/rc.robot"
-
 __line robot_nofile_hard \
     --file /etc/security/limits.conf \
     --line "robot           hard    nofile          65535"
@@ -107,19 +101,4 @@ for ros_pkg in ${ros_extra_packages}; do
 done
 
 __opencv --version=2.4.3
-
-#__ros_opencv_overlay
-#__line rossetup \
-#    --line ". /opt/ros/opencv_overlay/overlay_setup.sh" \
-#    --file "/etc/bash.bashrc"
-
-if [ ${__target_host} = "sr2" ]; then
-WIRED_ROUTES="
- up route add -net 192.168.180.0 netmask 255.255.255.0 gw 10.10.180.31
- down route del -net 192.168.180.0 netmask 255.255.255.0 gw 10.10.180.31
-"
-export WIRED_ROUTES
-fi
-__samplereturn_network
-
 
