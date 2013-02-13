@@ -4,3 +4,38 @@ cdist
 cdist is a usable configuration management system.
 
 For the web documentation have a look at docs/web/.
+
+-------------------------------------------------
+------ Special Sample Return Instructions -------
+-------------------------------------------------
+1) sudo apt-get install ssh
+2) sudo apt-get source linux-headers
+3) ssh-keygen; do not use a password (or use a password, but then ssh add it)
+   a) sudo cat id_rsa.pub > /root/.ssh/authorized_keys (you may need to create the .ssh folder in /root first)
+4) adduser robot; password "robot" (make sure not to use useradd)
+5) sudo apt-get install python-software-properties
+6) Obtain a copy of robot_rsa and robot_rsa.pub (from Russel) and place in cdist/conf/manifest/files
+7) Download the source code for the linuxcan driver off of Kvaser's website:
+   http://www.kvaser.com/index.php?option=com_php&Itemid=288&swprod=c47a61a99cef1b9dd39630f3c25befe6&ean=0000000000000
+put in cdist/conf/type/__kvaser_canlib/files/
+make sure name and canlib type arguments agree
+  a) Make a copy of the .tar.gz file and copy it to /usr/local/src with name linuxcan_BETA_20120702.tar.gz
+  a) Extract somewhere convenient and go into the canlib subfolder
+  b) Run "make" and then "sudo make install"
+8) cdist/bin/cdist -v config $(uname -n)
+9) Read any failures carefully, you might need try again after:
+  a) sudo apt-get update
+  b) sudo apt-get upgrade
+
+---------------------------------------------
+--- How to recover from nvidia driver fail --
+---------------------------------------------
+1) Install linux headers
+  a) sudo apt-get install linux-headers-generic
+2) Remove current nvidia drivers
+  a) sudo apt-get remove nvidia*
+3) Reinstall nvidia driver
+  a) sudo apt-get install nvidia-current-updates
+  b) MAKE SURE that the output indicates the kernel module is built
+4) Reference this website for help
+  a) askubuntu.com/questions/202574/desktop-does-not-show-when-i-installed-nvidia-drivers
