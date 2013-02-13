@@ -26,4 +26,7 @@ case "$__target_host" in
         . $__manifest/samplereturn
         . $__manifest/samplereturn-robot
         ;;
+    TheSmooth)
+        . $__manifest/samplereturn
+        ;;
 esac
