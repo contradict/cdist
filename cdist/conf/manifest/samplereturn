@@ -79,7 +79,7 @@ __line robot_nofile_soft \
     --line "robot           soft    nofile          65535"
 
 
-__kvaser_canlib --tarname "linuxcan" --version "_BETA_20120702" --devices "leaf"
+__kvaser_canlib --tarname "linuxcan" --version "" --devices "leaf"
 
 __package_apt libtbb-dev --state present
 __package_apt libsuitesparse-dev --state present
