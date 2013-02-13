@@ -24,5 +24,6 @@ case "$__target_host" in
         ;;
     sr?)
         . $__manifest/samplereturn
+        . $__manifest/samplereturn-robot
         ;;
 esac
