@@ -23,7 +23,8 @@ done
 # since dependency resolution does not work
 __user robot \
        --home /home/robot \
-       --shell /bin/bash
+       --shell /bin/bash \
+       --password robot
 
 require="__user/robot" \
        __user_groups robot-groups \
@@ -84,17 +85,17 @@ __kvaser_canlib --tarname "linuxcan" --version "" --devices "leaf"
 __package_apt libtbb-dev --state present
 __package_apt libsuitesparse-dev --state present
 
-__ros --distribution groovy
+__ros --distribution hydro
 ros_extra_packages="
-ros-groovy-camera-drivers
-ros-groovy-joystick-drivers
-ros-groovy-dynamixel-motor
-ros-groovy-object-recognition-core
-ros-groovy-object-recognition-capture
-ros-groovy-object-recognition-linemod
-ros-groovy-object-recognition-msgs
-ros-groovy-navigation
-ros-groovy-rqt-nav-view
+ros-hydro-camera1394
+ros-hydro-joystick-drivers
+ros-hydro-dynamixel-motor
+ros-hydro-object-recognition-core
+ros-hydro-object-recognition-capture
+ros-hydro-object-recognition-linemod
+ros-hydro-object-recognition-msgs
+ros-hydro-navigation
+ros-hydro-rqt-nav-view
 "
 for ros_pkg in ${ros_extra_packages}; do
     require="__ros" __package_apt ${ros_pkg} --state present
