@@ -29,4 +29,7 @@ case "$__target_host" in
     TheSmooth)
         . $__manifest/samplereturn
         ;;
+    localhost)
+        . $__manifest/samplereturn
+        ;;
 esac
