@@ -18,19 +18,14 @@ export WIRED_INTERFACE="eth0"
 export WIRED_NM="255.255.0.0"
 export WIRED_GW="10.10.1.1"
 export WIRED_NS="10.10.10.10"
-export WIRELESS_CHANNEL="4"
-export WIRELESS_SSID="survey"
-export WIRELESS_KEY="752ac5142d"
 export WIRELESS_NM="255.255.255.0"
 if [ "$(cat $__object/explorer/${WIRED_INTERFACE}_address)" = "${WIRED_IP}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_gateway)" = "${WIRED_GW}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_netmask)" = "${WIRED_NM}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_nameserver)" = "${WIRED_NS}" -a \
-	 "$(cat $__object/explorer/wlan0_address)" = "${WIRELESS_IP}" -a \
-	 "$(cat $__object/explorer/wlan0_netmask)" = "${WIRELESS_NM}" -a \
-	 "$(cat $__object/explorer/wlan0_wireless-channel)" = "${WIRELESS_CHANNEL}" -a \
-	 "$(cat $__object/explorer/wlan0_wireless-essid)" = "${WIRELESS_SSID}" -a \
-	 "$(cat $__object/explorer/wlan0_wireless-key)" = "${WIRELESS_KEY}" ] ; then
+	 "$(cat $__object/explorer/wlan1_address)" = "${WIRELESS_IP}" -a \
+	 "$(cat $__object/explorer/wlan1_netmask)" = "${WIRELESS_NM}" -a \
+	 ] ; then
 # all set, don't change a thing
 true
 else

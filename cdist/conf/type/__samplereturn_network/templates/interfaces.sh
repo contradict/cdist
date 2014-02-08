@@ -22,16 +22,4 @@ if [ -n "${WIRED_ROUTES}" ]; then
     echo ${WIRED_ROUTES}
 fi
 
-if [ -n "${WIRELESS_IP}" ]; then
-cat <<EOF
-allow-hotplug wlan0
-iface wlan0 inet static
-  wireless-mode ad-hoc
-  wireless-channel ${WIRELESS_CHANNEL}
-  wireless-essid ${WIRELESS_SSID}
-  wireless-key ${WIRELESS_KEY}
-  address ${WIRELESS_IP}
-  netmask ${WIRELESS_NM}
-EOF
-fi
 
