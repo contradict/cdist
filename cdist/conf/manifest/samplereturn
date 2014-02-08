@@ -34,6 +34,7 @@ require="__user/robot" \
        --group plugdev \
        --group lpadmin \
        --group sambashare \
+       --group audio \
        --group video \
        --group users \
        --group sudo
@@ -96,7 +97,18 @@ ros-hydro-object-recognition-linemod
 ros-hydro-object-recognition-msgs
 ros-hydro-navigation
 ros-hydro-rqt-nav-view
+ros-hydro-audio-comon
+ros-hydro-executive-smach
+festvox-don
+festvox-en1
+festvox-kallpc16k
+festvox-kdlpc16k
+festvox-rablpc16k
+festvox-us1
+festvox-us2
+festvox-us3
 "
+
 for ros_pkg in ${ros_extra_packages}; do
     require="__ros" __package_apt ${ros_pkg} --state present
 done
