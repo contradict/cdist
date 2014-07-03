@@ -6,14 +6,18 @@ else
     distribution="electric"
 fi
 
-__apt_add_repository --repository http://packages.ros.org/ros/ubuntu \
-                     --state present \
-                     --keyurl http://packages.ros.org/ros.key \
-                     rosrepo
+__apt_key_uri roskey \
+    --name 'ROS Builder <rosbuild@ros.org>' \
+    --uri http://packages.ros.org/ros.key \
+    --state present
+require="__apt_key_uri/roskey" \
+    __apt_source rosrepo \
+            --uri http://packages.ros.org/ros/ubuntu \
+            --component main
 
 rname=ros-${distribution}
 
-require="__apt_add_repository/rosrepo "\
+require="__apt_source/rosrepo "\
     __package_apt ${rname}-desktop-full --state present
 
 
