@@ -3,11 +3,13 @@ version=$1
 umask 0022
 mkdir -p /usr/local/src
 cd /usr/local/src
-wget -q http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/${version}/OpenCV-${version}.tar.bz2
-tar -xjf OpenCV-${version}.tar.bz2 --no-same-owner
-chgrp -R users OpenCV-${version}
-chmod g+rX OpenCV-${version}
-pushd OpenCV-${version}
+wget -q
+http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/${version}/opencv-${version}.zip
+rm -rf opencv-${version}
+unzip opencv-${version}.zip
+chgrp -R users opencv-${version}
+chmod g+rX opencv-${version}
+pushd opencv-${version}
 mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
@@ -25,5 +27,5 @@ make -j8
 make install
 ldconfig
 popd
-# rm -rf OpenCV-${version}.tar.bz2
-# rm -rf OpenCV-${version}
+# rm -rf opencv-${version}.tar.bz2
+# rm -rf opencv-${version}

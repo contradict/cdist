@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# Also needs nvidia-cuda-toolkit >=4.1, there is no
-# good automated way to install this yet.
-
 packages="
+wget
+build-essential
 cmake
+unzip
+libqt4-dev
 libjpeg-dev
 libpng12-dev
 libtiff4-dev
@@ -19,18 +20,13 @@ libtbb-dev
 libgstreamer-plugins-base0.10-dev
 libv4l-dev
 python-sphinx
+nvidia-cuda-toolkit
+nvidia-cuda-dev
 "
-
 for pkg in $packages
 do
     __package $pkg --state present
 done
-
-__nvidia_cuda --state present \
-    --download \
-    --force_ubuntu_release=11.10 \
-    --update=1 \
-    --version=5.0.35
 
 if [ -e $__object/parameter/version ]; then
     version=$( cat $__object/parameter/version )
