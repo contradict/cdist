@@ -4,27 +4,21 @@ while read host; do
     set $host
     __line ${2}_entry --file /etc/hosts --line "${host}" </dev/null
     case ${2} in
-        ${__target_host}-wireless*)
-            WIRELESS_IP=$1
-            ;;
         ${__target_host})
             WIRED_IP=$1
             ;;
     esac
 done < "$__type/files/hosts"
-export WIRED_IP WIRELESS_IP
+export WIRED_IP
 
-export WIRED_INTERFACE="eth0"
+export WIRED_INTERFACE="em1"
 export WIRED_NM="255.255.0.0"
 export WIRED_GW="10.10.1.1"
 export WIRED_NS="10.10.10.10"
-export WIRELESS_NM="255.255.255.0"
 if [ "$(cat $__object/explorer/${WIRED_INTERFACE}_address)" = "${WIRED_IP}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_gateway)" = "${WIRED_GW}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_netmask)" = "${WIRED_NM}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_nameserver)" = "${WIRED_NS}" -a \
-	 "$(cat $__object/explorer/wlan1_address)" = "${WIRELESS_IP}" -a \
-	 "$(cat $__object/explorer/wlan1_netmask)" = "${WIRELESS_NM}" -a \
 	 ] ; then
 # all set, don't change a thing
 true
