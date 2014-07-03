@@ -1,19 +1,20 @@
 #!/bin/bash
 
+ros_distro="indigo"
+
 packages="
+vim-nox
+build-essential
 git-all
-terminator
 tmux
 gscanbus
 coriander
-nvidia-current-updates
 htop
 libgphoto2-2-dev
+libsuitesparse-dev
+ipython
+python-matplotlib
 "
-
-__package nvidia-experimental-310 --state absent
-__package nvidia-settings-experimental-310 --state absent
-
 for pkg in $packages
 do
     __package $pkg --state present
@@ -80,25 +81,17 @@ __line robot_nofile_soft \
     --file /etc/security/limits.conf \
     --line "robot           soft    nofile          65535"
 
+require="__package/build-essential __package/wget" \
+    __kvaser_canlib --version "5_3_0" --devices "leaf"
 
-__kvaser_canlib --tarname "linuxcan" --version "" --devices "leaf"
-
-__package_apt libtbb-dev --state present
-__package_apt libsuitesparse-dev --state present
-
-__ros --distribution hydro
+# not yet in indigo
+# ros-${ros_distro}-camera1394
+# ros-${ros_distro}-audio-comon
+export CDIST_ORDER_DEPENDENCY=on
+__ros --distribution ${ros_distro}
 ros_extra_packages="
-ros-hydro-camera1394
-ros-hydro-joystick-drivers
-ros-hydro-dynamixel-motor
-ros-hydro-object-recognition-core
-ros-hydro-object-recognition-capture
-ros-hydro-object-recognition-linemod
-ros-hydro-object-recognition-msgs
-ros-hydro-navigation
-ros-hydro-rqt-nav-view
-ros-hydro-audio-comon
-ros-hydro-executive-smach
+ros-${ros_distro}-joystick-drivers
+ros-${ros_distro}-navigation
 festvox-don
 festvox-en1
 festvox-kallpc16k
@@ -110,8 +103,11 @@ festvox-us3
 "
 
 for ros_pkg in ${ros_extra_packages}; do
-    require="__ros" __package_apt ${ros_pkg} --state present
+    __package ${ros_pkg} --state present
 done
+unset CDIST_ORDER_DEPENDENCY
 
-__opencv --version=2.4.3
+
+require="__package/build-essential" \
+    __opencv --version=2.4.9
 
