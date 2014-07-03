@@ -1,19 +1,10 @@
 #!/bin/bash
 
-__package vim-nox
-
 require="__user/robot" \
     __line startuprobot \
         --file /etc/rc.local \
         --line ". /home/robot/Desktop/SampleReturn/src/scripts/rc.robot"
 
-if [ ${__target_host} = "sr2" ]; then
-WIRED_ROUTES="
- up route add -net 192.168.180.0 netmask 255.255.255.0 gw 10.10.180.31
- down route del -net 192.168.180.0 netmask 255.255.255.0 gw 10.10.180.31
-"
-export WIRED_ROUTES
-fi
 __samplereturn_network
 
 
