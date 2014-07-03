@@ -2,6 +2,7 @@
 #
 # 2010-2011 Steven Armstrong (steven-cdist at armstrong.cc)
 # 2012-2013 Nico Schottelius (nico-cdist at schottelius.org)
+# 2014      Daniel Heule     (hda at sfs.biz)
 #
 # This file is part of cdist.
 #
@@ -102,6 +103,31 @@ class EmulatorTestCase(test.CdistTestCase):
         emu = emulator.Emulator(argv, env=self.env)
         # if we get here all is fine
 
+    def test_requirement_via_order_dependency(self):
+        self.env['CDIST_ORDER_DEPENDENCY'] = 'on'
+        argv = ['__planet', 'erde']
+        emu = emulator.Emulator(argv, env=self.env)
+        emu.run()
+        argv = ['__planet', 'mars']
+        emu = emulator.Emulator(argv, env=self.env)
+        emu.run()
+        # In real world, this is not shared over instances
+        del self.env['require']
+        argv = ['__file', '/tmp/cdisttest']
+        emu = emulator.Emulator(argv, env=self.env)
+        emu.run()
+        # now load the objects and verify the require parameter of the objects
+        cdist_type = core.CdistType(self.local.type_path, '__planet')
+        erde_object = core.CdistObject(cdist_type, self.local.object_path, 'erde')
+        mars_object = core.CdistObject(cdist_type, self.local.object_path, 'mars')
+        cdist_type = core.CdistType(self.local.type_path, '__file')
+        file_object = core.CdistObject(cdist_type, self.local.object_path, '/tmp/cdisttest')
+        # now test the recorded requirements
+        self.assertTrue(len(erde_object.requirements) == 0)
+        self.assertEqual(list(mars_object.requirements), ['__planet/erde'])
+        self.assertEqual(list(file_object.requirements), ['__planet/mars'])
+        # if we get here all is fine
+
 
 class AutoRequireEmulatorTestCase(test.CdistTestCase):
 
@@ -128,6 +154,44 @@ class AutoRequireEmulatorTestCase(test.CdistTestCase):
         self.manifest.run_type_manifest(cdist_object)
         expected = ['__planet/Saturn', '__moon/Prometheus']
         self.assertEqual(sorted(cdist_object.autorequire), sorted(expected))
+
+class OverrideTestCase(test.CdistTestCase):
+
+    def setUp(self):
+        self.temp_dir = self.mkdtemp()
+        handle, self.script = self.mkstemp(dir=self.temp_dir)
+        os.close(handle)
+        base_path = self.temp_dir
+
+        self.local = local.Local(
+            target_host=self.target_host,
+            base_path=base_path,
+            exec_path=test.cdist_exec_path,
+            add_conf_dirs=[conf_dir])
+        self.local.create_files_dirs()
+
+        self.manifest = core.Manifest(self.target_host, self.local)
+        self.env = self.manifest.env_initial_manifest(self.script)
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
+
+    def test_override_negative(self):
+        argv = ['__file', '/tmp/foobar']
+        emu = emulator.Emulator(argv, env=self.env)
+        emu.run()
+        argv = ['__file', '/tmp/foobar','--mode','404']
+        emu = emulator.Emulator(argv, env=self.env)
+        self.assertRaises(cdist.Error, emu.run)
+
+    def test_override_feature(self):
+        argv = ['__file', '/tmp/foobar']
+        emu = emulator.Emulator(argv, env=self.env)
+        emu.run()
+        argv = ['__file', '/tmp/foobar','--mode','404']
+        self.env['CDIST_OVERRIDE'] = 'on'
+        emu = emulator.Emulator(argv, env=self.env)
+        emu.run()
 
 
 class ArgumentsTestCase(test.CdistTestCase):
@@ -182,7 +246,7 @@ class ArgumentsTestCase(test.CdistTestCase):
         object_id = 'some-id'
         value = 'some value'
         argv = [type_name, object_id, '--required1', value, '--required2', value]
-        print(self.env)
+#        print(self.env)
         os.environ.update(self.env)
         emu = emulator.Emulator(argv)
         emu.run()

@@ -104,6 +104,11 @@ eof
     ;;
 
     ml-release)
+        if [ $# -ne 1 ]; then
+            echo "$0 ml-release version" >&2
+            exit 1
+        fi
+
         version=$1; shift
 
         to_a=cdist
@@ -142,40 +147,22 @@ eof
 
     freecode-release)
         version=$1; shift
-        api_token=$(awk '/machine freecode login/ { print $8 }' ~/.netrc)
-
         printf "Enter tag list for freecode release %s> " "$version"
         read taglist
 
         printf "Enter changelog for freecode release %s> " "$version"
         read changelog
 
-        echo "Submit preview"
-        cat << eof
-tag_list = $taglist
-changelog = $changelog
-version = $version
-eof
-        printf "Press enter to submit to freecode> "
-        read dummy
-
-        cat << eof | cfreecode-api release-add cdist
-        {
-            "auth_code": "$api_token",
-            "release": {
-                "tag_list": "$taglist",
-                "version": "$version",
-                "changelog": "$changelog",
-                "hidden_from_frontpage": false
-            }
-        }
-eof
-
+        echo "Submitting to freecode ..."
+        python2 ~/p/foreign/freecode-submit-2.7/freecode-submit -P cdist \
+            -v "$version" -c "$changelog" \
+            -t "$taglist" \
+            -n
     ;;
 
     release-git-tag)
         target_version=$($0 changelog-version)
-        if git rev-parse --verify refs/tags/$target_version; then
+        if git rev-parse --verify refs/tags/$target_version 2>/dev/null; then
             echo "Tag for $target_version exists, aborting"
             exit 1
         fi
@@ -205,19 +192,30 @@ eof
         fi
 
         # Ensure we are on the master branch
+        masterbranch=yes
         if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then
             echo "Releases are happening from the master branch, aborting"
-            exit 1
+
+            echo "Enter the magic word to release anyway"
+            read magicword
+
+            if [ "$magicword" = "iknowwhatido" ]; then
+                masterbranch=no
+            else
+                exit 1
+            fi
         fi
 
-        # Ensure version branch exists
-        if ! git rev-parse --verify refs/heads/$target_branch 2>/dev/null; then
-            git branch "$target_branch"
-        fi
+        if [ "$masterbranch" = yes ]; then
+            # Ensure version branch exists
+            if ! git rev-parse --verify refs/heads/$target_branch 2>/dev/null; then
+                git branch "$target_branch"
+            fi
 
-        # Merge master branch into version branch
-        git checkout "$target_branch"
-        git merge master
+            # Merge master branch into version branch
+            git checkout "$target_branch"
+            git merge master
+        fi
 
         # Verify that after the merge everything works
         "$0" check-date
@@ -236,14 +234,20 @@ eof
         "$0" release-git-tag
 
         # Also merge back the version branch
-        git checkout master
-        git merge "$target_branch"
+        if [ "$masterbranch" = yes ]; then
+            git checkout master
+            git merge "$target_branch"
+        fi
 
         # Publish git changes
         make pub
 
         # publish man, speeches, website
-        make web-release-all
+        if [ "$masterbranch" = yes ]; then
+            make web-release-all
+        else
+            make web-release-all-no-latest
+        fi
 
         # Ensure that pypi release has the right version
         "$0" version

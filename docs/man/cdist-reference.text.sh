@@ -1,6 +1,7 @@
 #!/bin/sh
 #
-# 2010-2013 Nico Schottelius (nico-cdist at schottelius.org)
+# 2010-2014 Nico Schottelius (nico-cdist at schottelius.org)
+# 2014      Daniel Heule     (hda at sfs.biz)
 #
 # This file is part of cdist.
 #
@@ -131,7 +132,8 @@ confdir/type/<name>/explorer::
 
 confdir/type/<name>/files::
     This directory is reserved for user data and will not be used
-    by cdist at any time
+    by cdist at any time. It can be used for storing supplementary
+    files (like scripts to act as a template or configuration files).
 
 out/::
     This directory contains output of cdist and is usually located
@@ -175,13 +177,22 @@ OBJECTS
 For object to object communication and tests, the following paths are
 usable within a object directory:
 
+files::
+    This directory is reserved for user data and will not be used
+    by cdist at any time. It can be used freely by the type 
+    (for instance to store template results).
 changed::
     This empty file exists in an object directory, if the object has
     code to be excuted (either remote or local)
+stdin::
+    This file exists and contains data, if data was provided on stdin 
+    when the type was called.
 
 
-ENVIRONMENT VARIABLES
----------------------
+ENVIRONMENT VARIABLES (FOR READING)
+-----------------------------------
+The following environment variables are exported by cdist:
+
 __explorer::
     Directory that contains all global explorers.
     Available for: initial manifest, explorer, type explorer, shell
@@ -199,10 +210,10 @@ __messages_out::
     Available for: initial manifest, type manifest, type gencode
 __object::
     Directory that contains the current object.
-    Available for: type manifest, type explorer, type gencode
+    Available for: type manifest, type explorer, type gencode and code scripts
 __object_id::
     The type unique object id.
-    Available for: type manifest, type explorer, type gencode
+    Available for: type manifest, type explorer, type gencode and code scripts
     Note: The leading and the trailing "/" will always be stripped (caused by
     the filesystem database and ensured by the core).
     Note: Double slashes ("//") will not be fixed and result in an error.
@@ -219,6 +230,24 @@ __type_explorer::
     Directory that contains the type explorers.
     Available for: type explorer
 
+ENVIRONMENT VARIABLES (FOR WRITING)
+-----------------------------------
+The following environment variables influence the behaviour of cdist:
+
+require::
+    Setup dependencies between objects (see cdist-manifest(7))
+
+CDIST_LOCAL_SHELL::
+    Use this shell locally instead of /bin/sh to execute scripts
+
+CDIST_REMOTE_SHELL::
+    Use this shell remotely instead of /bin/sh to execute scripts
+
+CDIST_OVERRIDE::
+    Allow overwriting type parameters (see cdist-manifest(7))
+
+CDIST_ORDER_DEPENDENCY::
+    Create dependencies based on the execution order (see cdist-manifest(7))
 
 SEE ALSO
 --------
@@ -227,6 +256,6 @@ SEE ALSO
 
 COPYING
 -------
-Copyright \(C) 2011-2013 Nico Schottelius. Free use of this software is
+Copyright \(C) 2011-2014 Nico Schottelius. Free use of this software is
 granted under the terms of the GNU General Public License version 3 (GPLv3).
 eof
