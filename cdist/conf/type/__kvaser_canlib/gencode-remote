@@ -1,9 +1,8 @@
 #!/bin/bash
 
-version="$(cat "$__object/parameter/version")"
-tarfile="$(cat "$__object/parameter/tarname")"${version}.tar.gz
-
-# echo "tarfile: ${tarfile}" >&2
+tarfile="linuxcan.tar.gz"
+version=$( cat $__object/parameter/version )
+kvaser_url="http://www.kvaser.com/software/7330130980754/V${version}/${tarfile}"
 
 lib_installed="$(cat "$__object/explorer/lib_installed")"
 # echo "lib_installed: ${lib_installed}" >&2
@@ -12,6 +11,7 @@ lib_installed="$(cat "$__object/explorer/lib_installed")"
 if [ "${lib_installed}" = "absent" ]; then
     # echo "unpacking" >&2
     echo "cd /usr/local/src"
+    echo "wget -Nq ${kvaser_url}"
     echo "rm -fr linuxcan"
     echo "tar -xzf ${tarfile}"
     echo "cd linuxcan"

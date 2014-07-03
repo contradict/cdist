@@ -1,9 +1,15 @@
 #!/bin/bash
 
-tarfile="$(cat "$__object/parameter/tarname")""$(cat "$__object/parameter/version")".tar.gz
+packages="
+wget
+build-essential
+"
+for pkg in $packages
+do
+    __package $pkg --state present
+done
 
-__file /usr/local/src/${tarfile} \
-    --source ${__type}/files/${tarfile} \
-    --owner root \
-    --group root
+tarfile="linuxcan.tar.gz"
+version=$( cat $__object/parameter/version )
+kvaser_url="http://www.kvaser.com/software/7330130980754/V${version}/${tarfile}"
 
