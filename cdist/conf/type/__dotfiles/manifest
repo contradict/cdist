@@ -12,9 +12,12 @@ for file in $(find ${__type}/files/ -maxdepth 1 -name '_*' -type f); do
 done
 
 mkdir -p $__object/files
-for file in $(find ${__type}/files/ -maxdepth 1 -name '_*' -type d); do
-    tarname="__$(basename ${file} | sed 's/^_//').tar"
-    tar -cf $__object/files/${tarname} --owner ${uid} --group ${gid} -C $__type/files/ _vim
+for directory in $(find ${__type}/files/ -maxdepth 1 -name '_*' -type d); do
+    tarname="__${__object_id}__$(basename ${directory} | sed 's/^_//').tar"
+    dirname=${directory}/../
+    tar -cf $__object/files/${tarname} \
+        --owner ${uid} --group ${gid} \
+        -C ${dirname} $(basename ${directory})
     __file /tmp/${tarname} --state present \
         --source $__object/files/${tarname}
 done

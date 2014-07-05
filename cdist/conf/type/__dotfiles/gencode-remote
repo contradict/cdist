@@ -1,8 +1,12 @@
 #!/bin/sh
 
-for tarname in $(find /tmp -maxdepth 1 -name "__*.tar"); do
-    dname=$(basename -s .tar ${tarname} | sed 's/^__/\./')
-    echo tar --strip-components 1 -Pxpf ${tarname} -C/home/${__object_id}/${dname}
-    echo rm ${tarname}
+cat <<__EOF__
+for tarname in \$(find /tmp -maxdepth 1 -regex '^/tmp/__.*__.*.tar'); do
+    dname=\$(basename -s .tar \${tarname} | sed 's/^__.*__/\\./')
+    mkdir -p /home/${__object_id}/\${dname}
+    chown ${__object_id}:${__object_id} /home/${__object_id}/\${dname}
+    chmod 775 /home/${__object_id}/\${dname}
+    tar --strip-components 1 -Pxpf \${tarname} -C/home/${__object_id}/\${dname}
+    rm \${tarname}
 done
-
+__EOF__
