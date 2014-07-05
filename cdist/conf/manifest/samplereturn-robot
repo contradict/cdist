@@ -10,3 +10,10 @@ __samplereturn_network
 require="__user/robot __samplereturn_network" \
     __dotfiles robot
 
+hostname=$(cat $__global/explorer/hostname)
+require="__directory/home/robot/sounds" \
+    __file /home/robot/sounds/${hostname}start.wav \
+    --group robot \
+    --mode 600 \
+    --owner robot \
+    --source $__manifest/files/sounds/${hostname}start.wav
