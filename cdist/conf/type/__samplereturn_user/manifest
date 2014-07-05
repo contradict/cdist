@@ -1,0 +1,26 @@
+#!/bin/bash
+
+crypted_pass=$(cat "$__object/parameter/password")
+
+__user ${__object_id} \
+       --home /home/${__object_id} \
+       --shell /bin/bash \
+       --password ${crypted_pass} \
+       --create-home
+
+require="__user/${__object_id}" \
+       __user_groups ${__object_id}-groups \
+       --user ${__object_id} \
+       --group dialout \
+       --group cdrom \
+       --group plugdev \
+       --group lpadmin \
+       --group sambashare \
+       --group audio \
+       --group video \
+       --group users \
+       --group sudo
+
+require="__user/${__object_id}" \
+    __dotfiles ${__object_id}
+

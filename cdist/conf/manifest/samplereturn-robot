@@ -7,9 +7,14 @@ require="__user/robot" \
 
 __samplereturn_network
 
-require="__user/robot __samplereturn_network" \
-    __dotfiles robot
+crypted_pass='$6$IuyZIm6s$H4UMZipJV5HCLK6tSmSLExQTtnfx7ctLudBNGhzTLWcIeh/2.0z4xJGLECJfuc.34WIA3YBEhxOi.shfFYipR0'
 
+
+require="__user/robot" \
+    __directory /home/robot/sounds \
+    --group robot \
+    --mode 775 \
+    --owner robot
 hostname=$(cat $__global/explorer/hostname)
 require="__directory/home/robot/sounds" \
     __file /home/robot/sounds/${hostname}start.wav \

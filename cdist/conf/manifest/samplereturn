@@ -23,32 +23,8 @@ done
 
 crypted_pass='$6$IuyZIm6s$H4UMZipJV5HCLK6tSmSLExQTtnfx7ctLudBNGhzTLWcIeh/2.0z4xJGLECJfuc.34WIA3YBEhxOi.shfFYipR0'
 
-# must manually create user first
-# since dependency resolution does not work
-__user robot \
-       --home /home/robot \
-       --shell /bin/bash \
-       --password ${crypted_pass} \
-       --create-home
-
-require="__user/robot" \
-       __user_groups robot-groups \
-       --user robot \
-       --group dialout \
-       --group cdrom \
-       --group plugdev \
-       --group lpadmin \
-       --group sambashare \
-       --group audio \
-       --group video \
-       --group users \
-       --group sudo
-
-require="__user/robot" \
-    __directory /home/robot \
-    --owner robot \
-    --group robot \
-    --mode 755
+__samplereturn_user robot \
+    --password ${crypted_pass}
 
 require="__user/robot" \
     __ssh_authorized_keys \
