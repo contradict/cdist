@@ -1,4 +1,15 @@
 set nocompatible
+filetype off
+
+" set rtp+=~/.vim/bundle/vundle/
+" call vundle#rc()
+
+" let g:syntastic_always_populate_loc_list = 1
+
+" Bundle 'gmarik/vundle'
+" Bundle 'scrooloose/syntastic'
+" Bundle 'Valloric/YouCompleteMe'
+
 " set backspace to be able to delete previous characters
 set bs=2
 " Enable line numbering, taking up 6 spaces
@@ -22,11 +33,18 @@ set ignorecase
 set smartcase
 
 "Informative status line
-set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
+set statusline=%f%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ %c]
+set laststatus=2
+
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%>80v.\+/
+
+set colorcolumn=+1
+highlight ColorColumn ctermbg=red
 
 "Set color scheme
-set t_Co=256
-colorscheme inkpot
+"set t_Co=256
+"colorscheme inkpot
 syntax enable
 
 set foldenable
@@ -34,8 +52,12 @@ set foldenable
 nnoremap <space> za
 
 highlight TrailingSpaces ctermbg=red
-match TrailingSpaces / *$/
+match TrailingSpaces /  +$/
 
 au BufNewFile,BufRead *.ino set filetype=cpp
 
 au BufRead,BufNewFile *.go set makeprg=go\ build
+
+let g:xml_syntax_folding=1
+au FileType xml setlocal foldmethod=syntax
+
