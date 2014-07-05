@@ -62,9 +62,7 @@ require="__package/build-essential __package/wget" \
     __kvaser_canlib --version "5_3_0" --devices "leaf"
 
 # not yet in indigo
-# ros-${ros_distro}-camera1394
 # ros-${ros_distro}-audio-comon
-export CDIST_ORDER_DEPENDENCY=on
 __ros --distribution ${ros_distro}
 ros_extra_packages="
 ros-${ros_distro}-joystick-drivers
@@ -82,12 +80,9 @@ gstreamer0.10-plugins-good
 gstreamer0.10-plugins-ugly
 gstreamer0.10-alsa
 "
-
 for ros_pkg in ${ros_extra_packages}; do
     __package ${ros_pkg} --state present
 done
-unset CDIST_ORDER_DEPENDENCY
-
 
 require="__package/build-essential" \
     __opencv --version=2.4.9
