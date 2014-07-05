@@ -37,7 +37,6 @@ fi
 installed_version=$(cat $__object/explorer/exists)
 
 if [ ${installed_version} = ${version} ]; then
-    echo "OpenCV-${installed_version} already present" >&2
     exit 0;
 fi
 
