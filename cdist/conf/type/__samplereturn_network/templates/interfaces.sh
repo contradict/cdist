@@ -22,4 +22,4 @@ if [ -n "${WIRED_ROUTES}" ]; then
     echo ${WIRED_ROUTES}
 fi
 
-
+echo iface ${WIRED_INTERFACE}:1 inet dhcp

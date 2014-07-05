@@ -13,8 +13,8 @@ export WIRED_IP
 
 export WIRED_INTERFACE="em1"
 export WIRED_NM="255.255.0.0"
-export WIRED_GW="10.10.1.1"
 export WIRED_NS="10.10.10.10"
+export WIRED_GW=""
 if [ "$(cat $__object/explorer/${WIRED_INTERFACE}_address)" = "${WIRED_IP}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_gateway)" = "${WIRED_GW}" -a \
 	 "$(cat $__object/explorer/${WIRED_INTERFACE}_netmask)" = "${WIRED_NM}" -a \
