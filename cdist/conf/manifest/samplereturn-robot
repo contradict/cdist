@@ -7,4 +7,6 @@ require="__user/robot" \
 
 __samplereturn_network
 
+require="__user/robot __samplereturn_network" \
+    __dotfiles robot
 

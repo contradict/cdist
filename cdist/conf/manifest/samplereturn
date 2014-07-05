@@ -67,9 +67,6 @@ require="__ssh_authorized_keys/robot" \
     --source $__manifest/files/robot_rsa.pub
 
 require="__user/robot" \
-    __dotfiles robot
-
-require="__user/robot" \
     __git /home/robot/Desktop/SampleReturn \
         --source git://github.com/contradict/SampleReturn.git \
         --branch master \
