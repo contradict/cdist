@@ -100,6 +100,10 @@ festvox-rablpc16k
 festvox-us1
 festvox-us2
 festvox-us3
+python-gst0.10
+gstreamer0.10-plugins-good
+gstreamer0.10-plugins-ugly
+gstreamer0.10-alsa
 "
 
 for ros_pkg in ${ros_extra_packages}; do
